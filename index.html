@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tüth — Project Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple: #B493C4;
+      --lime: #E0FF78;
+      --dark: #1a1a1a;
+      --white: #FFFFFF;
+      --red: #ED3227;
+      --orange: #FF8000;
+      --yellow: #FFCE09;
+      --green: #0CBF54;
+      --blue: #00B2E5;
+      --border: 3px solid #1a1a1a;
+      --shadow-lg: 6px 6px 0px #1a1a1a;
+      --shadow-sm: 4px 4px 0px #1a1a1a;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--purple);
+      color: var(--dark);
+      min-height: 100vh;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .blobs {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.5;
+      animation: drift 15s ease-in-out infinite alternate;
+    }
+    .blob-1 { width: 420px; height: 420px; background: #C9A8D8; top: -120px; left: -120px; animation-delay: 0s; }
+    .blob-2 { width: 300px; height: 300px; background: #E0FF78; top: 25%; right: -60px; opacity: 0.25; animation-delay: -5s; }
+    .blob-3 { width: 360px; height: 360px; background: #A07BB5; bottom: -60px; left: 30%; animation-delay: -10s; }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(30px, 20px) scale(1.05); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 28px 16px 72px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .wordmark {
+      height: 38px;
+      filter: drop-shadow(3px 3px 0 var(--dark));
+    }
+
+    .header-meta {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    .header-meta .sub {
+      opacity: 0.55;
+      font-weight: 500;
+    }
+
+    /* Usage guide */
+    .usage-guide {
+      background: var(--dark);
+      border: var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow-sm);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      color: var(--white);
+    }
+
+    .usage-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--lime);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .usage-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .usage-step {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .usage-num {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      background: var(--lime);
+      color: var(--dark);
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .usage-text {
+      font-size: 12.5px;
+      line-height: 1.5;
+      opacity: 0.85;
+    }
+
+    /* Focus card */
+    .focus-card {
+      background: var(--lime);
+      border: var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      padding: 28px;
+      margin-bottom: 28px;
+    }
+
+    .focus-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dark);
+      opacity: 0.55;
+      margin-bottom: 8px;
+    }
+
+    .focus-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--dark);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .focus-meta {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--dark);
+      opacity: 0.65;
+      margin-bottom: 20px;
+    }
+
+    .focus-steps {
+      background: rgba(26,26,26,0.07);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+
+    .focus-steps-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+      margin-bottom: 10px;
+    }
+
+    .focus-steps ol {
+      padding-left: 18px;
+    }
+
+    .focus-steps li {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+
+    .focus-steps li:last-child { margin-bottom: 0; }
+
+    .focus-prompt {
+      background: var(--dark);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+
+    .focus-prompt-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--lime);
+      margin-bottom: 7px;
+    }
+
+    .focus-prompt-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.55;
+      font-style: italic;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px 16px;
+      border-radius: 14px;
+      border: var(--border);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: transform 0.08s, box-shadow 0.08s;
+      background: none;
+    }
+
+    .btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0 var(--dark);
+    }
+
+    .btn-dark { background: var(--dark); color: var(--lime); }
+    .btn-white { background: var(--white); color: var(--dark); }
+
+    .copy-confirm {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0CBF54;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .copy-confirm.show { opacity: 1; }
+
+    /* Filter row */
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: var(--border);
+      background: var(--white);
+      color: var(--dark);
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: background 0.12s, transform 0.08s, box-shadow 0.08s;
+    }
+
+    .filter-pill:hover { background: #f0eeee; }
+
+    .filter-pill.active {
+      background: var(--dark);
+      color: var(--lime);
+    }
+
+    .filter-pill:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--dark);
+    }
+
+    /* Tasks */
+    .task-group { margin-bottom: 20px; }
+
+    .task-group-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--dark);
+      opacity: 0.5;
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    .task-card {
+      background: var(--white);
+      border: var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: opacity 0.2s;
+    }
+
+    .task-card.completed { opacity: 0.38; }
+
+    .task-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .task-check {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border: 2.5px solid var(--dark);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .task-check.checked { background: var(--dark); }
+
+    .task-check.checked::after {
+      content: '✓';
+      color: var(--lime);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .task-info { flex: 1; min-width: 0; }
+
+    .task-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.3;
+    }
+
+    .task-output {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--dark);
+      opacity: 0.5;
+      margin-top: 2px;
+    }
+
+    .task-tags { flex-shrink: 0; }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 2px solid var(--dark);
+    }
+
+    .tag-30 { background: var(--yellow); }
+    .tag-1hr { background: var(--orange); color: #fff; }
+    .tag-dip { background: var(--blue); color: #fff; }
+
+    .expand-icon {
+      font-size: 13px;
+      opacity: 0.35;
+      transition: transform 0.18s;
+      flex-shrink: 0;
+    }
+
+    .task-card.open .expand-icon { transform: rotate(180deg); }
+
+    .task-body {
+      display: none;
+      padding: 0 18px 18px;
+      border-top: 2px solid rgba(26,26,26,0.08);
+    }
+
+    .task-card.open .task-body { display: block; }
+
+    .task-body-inner { padding-top: 14px; }
+
+    .steps-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+      margin-bottom: 8px;
+    }
+
+    .steps-list {
+      padding-left: 20px;
+      margin-bottom: 14px;
+    }
+
+    .steps-list li {
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.6;
+      margin-bottom: 4px;
+    }
+
+    .prompt-box {
+      background: #f5f2f7;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+
+    .prompt-box-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.45;
+      margin-bottom: 6px;
+    }
+
+    .prompt-box-text {
+      font-size: 12.5px;
+      font-style: italic;
+      line-height: 1.55;
+    }
+
+    /* Panels */
+    .panel {
+      background: var(--white);
+      border: var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .panel-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .panel-chevron {
+      font-size: 14px;
+      opacity: 0.4;
+      transition: transform 0.18s;
+    }
+
+    .panel.open .panel-chevron { transform: rotate(180deg); }
+
+    .panel-body {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 2px solid rgba(26,26,26,0.08);
+    }
+
+    .panel.open .panel-body { display: block; }
+
+    .panel-inner { padding-top: 16px; }
+
+    /* Blockers */
+    .blocker {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(26,26,26,0.07);
+    }
+
+    .blocker:last-child { border-bottom: none; }
+
+    .blocker-dot {
+      width: 10px;
+      height: 10px;
+      min-width: 10px;
+      border-radius: 50%;
+      margin-top: 5px;
+    }
+
+    .dot-red { background: var(--red); }
+    .dot-orange { background: var(--orange); }
+
+    .blocker-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .blocker-impact { font-size: 12px; opacity: 0.55; }
+    .blocker-action { font-size: 12px; font-weight: 600; color: var(--green); margin-top: 3px; }
+
+    /* Status grid */
+    .status-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .status-item {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 2px solid rgba(26,26,26,0.09);
+    }
+
+    .status-area { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; opacity: 0.45; margin-bottom: 3px; }
+    .status-val { font-size: 13px; font-weight: 700; }
+    .col-done { color: var(--green); }
+    .col-active { color: var(--orange); }
+    .col-pending { color: var(--dark); opacity: 0.35; }
+
+    /* Timeline */
+    .timeline-item {
+      display: flex;
+      gap: 14px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(26,26,26,0.06);
+    }
+
+    .timeline-item:last-child { border-bottom: none; }
+
+    .tl-week {
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 54px;
+      opacity: 0.45;
+      padding-top: 2px;
+    }
+
+    .tl-obj { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .tl-output { font-size: 12px; opacity: 0.5; }
+
+    .now-badge {
+      display: inline-block;
+      background: var(--lime);
+      border: 2px solid var(--dark);
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 7px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* Decisions */
+    .decisions-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .decisions-table th {
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      opacity: 0.45;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(26,26,26,0.09);
+    }
+    .decisions-table td {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(26,26,26,0.06);
+      vertical-align: top;
+    }
+    .decisions-table tr:last-child td { border-bottom: none; }
+    .decisions-table td:first-child { font-weight: 700; width: 38%; padding-right: 8px; }
+
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 2px solid currentColor;
+    }
+
+    .badge-done { color: var(--green); }
+    .badge-pending { color: var(--orange); }
+    .badge-deferred { color: var(--dark); opacity: 0.35; }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up { animation: fadeUp 0.4s ease both; }
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+    .delay-4 { animation-delay: 0.32s; }
+
+    /* Mobile */
+    @media (max-width: 580px) {
+      .focus-title { font-size: 19px; }
+      .status-grid { grid-template-columns: 1fr; }
+      .usage-grid { grid-template-columns: 1fr; }
+      .task-tags { display: none; }
+      .filter-pill { font-size: 12px; padding: 7px 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<div class="container">
+
+  <!-- Header -->
+  <header class="header fade-up">
+    <svg class="wordmark" viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#ff9900" d="m16.0803 246.21762l0 69.25l163.73438 0l0 -69.25l-163.73438 0zm41.0625 -79.140625l0 306.6875l81.60937 0l0 -306.6875l-81.60937 0z"/>
+      <path fill="#ffab40" d="m291.85184 358.99887q0 18.796875 6.0625 30.1875q6.0625 11.375 22.875 11.375q17.3125 0 23.25 -11.375q5.9375 -11.390625 5.9375 -30.1875l0 -88.296875l95.96875 0l0 97.703125q0 34.625 -14.71875 59.609375q-14.71875 24.96875 -42.671875 38.328125q-27.9375 13.359375 -67.765625 13.359375q-39.5625 0 -67.39061 -13.359375q-27.828125 -13.359375 -42.546875 -38.328125q-14.71875 -24.984375 -14.71875 -59.609375l0 -97.703125l95.718735 0l0 88.296875zm83.359375 -118.71875q-18.046875 0 -30.546875 -12.609375q-12.484375 -12.609375 -12.484375 -30.421875q0 -17.8125 12.484375 -30.546875q12.5 -12.734375 30.546875 -12.734375q17.8125 0 30.296875 12.734375q12.484375 12.734375 12.484375 30.546875q0 17.8125 -12.484375 30.421875q-12.484375 12.609375 -30.296875 12.609375zm-101.65625 0q-18.04686 0 -30.54686 -12.609375q-12.484375 -12.609375 -12.484375 -30.421875q0 -17.8125 12.484375 -30.546875q12.5 -12.734375 30.54686 -12.734375q17.8125 0 30.296875 12.734375q12.5 12.734375 12.5 30.546875q0 17.8125 -12.5 30.421875q-12.484375 12.609375 -30.296875 12.609375z"/>
+      <path fill="#ff9900" d="m468.196 246.21762l0 69.25l163.7344 0l0 -69.25l-163.7344 0zm41.0625 -79.140625l0 306.6875l81.609406 0l0 -306.6875l-81.609406 0zm237.92783 -79.14063l-85.578125 0l0 385.82812l85.578125 0l0 -385.82812zm62.328125 247.32812l0 138.5l85.578125 0l0 -151.35938q0 -27.703125 -7.421875 -46.75q-7.421875 -19.046875 -24.25 -28.9375q-16.8125 -9.890625 -46.484375 -9.890625q-29.6875 0 -47.75 13.359375q-18.046875 13.34375 -26.453125 35.609375q-8.40625 22.265625 -8.40625 49.46875l12.859375 0q0 -12.375 4.203125 -20.53125q4.203125 -8.15625 11.875 -12.359375q7.671875 -4.21875 17.5625 -4.21875q16.8125 0 22.75 9.65625q5.9375 9.640625 5.9375 27.453125z"/>
+    </svg>
+    <div class="header-meta">
+      <div>Project Dashboard</div>
+      <div class="sub" id="today-date"></div>
+    </div>
+  </header>
+
+  <!-- How to use -->
+  <div class="usage-guide fade-up delay-1">
+    <div class="usage-title">How to use this dashboard</div>
+    <div class="usage-grid">
+      <div class="usage-step">
+        <div class="usage-num">1</div>
+        <div class="usage-text">Filter by how much time you have using the buttons below</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-num">2</div>
+        <div class="usage-text">Click any task card to expand it — steps and a ready-to-paste Claude prompt appear</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-num">3</div>
+        <div class="usage-text">Copy the prompt and paste it into a <strong style="color:var(--lime)">new chat in this project</strong> to execute the task</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-num">4</div>
+        <div class="usage-text">Tick the checkbox when done — progress saves automatically</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Focus card -->
+  <div class="focus-card fade-up delay-2">
+    <div class="focus-label">Your next action</div>
+    <div class="focus-title">Review V1 SKU statement</div>
+    <div class="focus-meta">⏱ 30 min &nbsp;·&nbsp; Output: tuth_v1_sku_statement.md confirmed</div>
+    <div class="focus-steps">
+      <div class="focus-steps-label">How to execute</div>
+      <ol>
+        <li>Open <strong>tuth_v1_sku_statement.md</strong> in your tüth folder</li>
+        <li>Read the one-sentence definition and the 10-item "not doing" list</li>
+        <li>Change anything that looks wrong — edit directly, or tell Claude "update the SKU statement"</li>
+        <li>When you're happy with it, say <strong>"the SKU is locked"</strong> — this unblocks the PRD, compliance path, and supplier research</li>
+      </ol>
+    </div>
+    <div class="focus-prompt">
+      <div class="focus-prompt-label">Say this to Claude (in a new chat)</div>
+      <div class="focus-prompt-text" id="focus-prompt-text">"Open tuth_v1_sku_statement.md and walk me through the V1 SKU definition. Flag anything that looks like a mistake or a missing decision, then ask me to confirm or change each point. Once confirmed, update the file to mark it as locked."</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-dark" onclick="copyFocusPrompt(this)">Copy prompt</button>
+      <span class="copy-confirm" id="focus-copy-ok">Copied!</span>
+    </div>
+  </div>
+
+  <!-- Time filter -->
+  <div class="filter-row fade-up delay-3">
+    <button class="filter-pill active" onclick="setFilter('all', this)">All tasks</button>
+    <button class="filter-pill" onclick="setFilter('30min', this)">⏱ 30 min</button>
+    <button class="filter-pill" onclick="setFilter('1hr', this)">⏳ 1 hour</button>
+    <button class="filter-pill" onclick="setFilter('dipping', this)">🔁 Dipping in</button>
+  </div>
+
+  <!-- Task list -->
+  <div id="task-list" class="fade-up delay-4"></div>
+
+  <!-- Blockers panel -->
+  <div class="panel open">
+    <div class="panel-header" onclick="togglePanel(this.parentElement)">
+      <span class="panel-title">🚨 Blockers</span>
+      <span class="panel-chevron">▾</span>
+    </div>
+    <div class="panel-body">
+      <div class="panel-inner">
+        <div class="blocker">
+          <div class="blocker-dot dot-red"></div>
+          <div>
+            <div class="blocker-title">V1 SKU not confirmed</div>
+            <div class="blocker-impact">Blocks PRD, compliance path, supplier research, and CAD brief — everything downstream</div>
+            <div class="blocker-action">→ Review tuth_v1_sku_statement.md and say "SKU is locked"</div>
+          </div>
+        </div>
+        <div class="blocker">
+          <div class="blocker-dot dot-orange"></div>
+          <div>
+            <div class="blocker-title">No supplier contacts yet</div>
+            <div class="blocker-impact">Can't price the product, can't get samples, can't commission a prototype</div>
+            <div class="blocker-action">→ 1-hour task: research 15 candidate suppliers</div>
+          </div>
+        </div>
+        <div class="blocker">
+          <div class="blocker-dot dot-orange"></div>
+          <div>
+            <div class="blocker-title">Product classification undecided</div>
+            <div class="blocker-impact">Can't map compliance obligations — affects Responsible Person, PIF, OPSS notification</div>
+            <div class="blocker-action">→ Resolve after SKU lock (30 min)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status panel -->
+  <div class="panel">
+    <div class="panel-header" onclick="togglePanel(this.parentElement)">
+      <span class="panel-title">📊 Project status</span>
+      <span class="panel-chevron">▾</span>
+    </div>
+    <div class="panel-body">
+      <div class="panel-inner">
+        <div class="status-grid">
+          <div class="status-item"><div class="status-area">Brand identity</div><div class="status-val col-done">✓ Done</div></div>
+          <div class="status-item"><div class="status-area">Visual system</div><div class="status-val col-done">✓ Done</div></div>
+          <div class="status-item"><div class="status-area">V1 SKU statement</div><div class="status-val col-active">⬤ Draft — needs lock</div></div>
+          <div class="status-item"><div class="status-area">Mechanical spec</div><div class="status-val col-done">✓ v0.1 done</div></div>
+          <div class="status-item"><div class="status-area">Financial model</div><div class="status-val col-done">✓ Done</div></div>
+          <div class="status-item"><div class="status-area">Landing page</div><div class="status-val col-done">✓ Live</div></div>
+          <div class="status-item"><div class="status-area">Prototype readiness pack</div><div class="status-val col-pending">○ Not started</div></div>
+          <div class="status-item"><div class="status-area">Supplier pipeline</div><div class="status-val col-pending">○ Not started</div></div>
+          <div class="status-item"><div class="status-area">Compliance path</div><div class="status-val col-pending">○ Not started</div></div>
+          <div class="status-item"><div class="status-area">Trade mark filing</div><div class="status-val col-pending">○ Deferred</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline panel -->
+  <div class="panel">
+    <div class="panel-header" onclick="togglePanel(this.parentElement)">
+      <span class="panel-title">📅 12-week plan</span>
+      <span class="panel-chevron">▾</span>
+    </div>
+    <div class="panel-body">
+      <div class="panel-inner">
+        <div class="timeline-item">
+          <div class="tl-week">23 Mar</div>
+          <div><div class="tl-obj">MVP lock + IP timing <span class="now-badge">NOW</span></div><div class="tl-output">V1 SKU statement · trade mark decision</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">30 Mar</div>
+          <div><div class="tl-obj">Prototype Readiness Pack v1</div><div class="tl-output">PRD · claims guardrails · compliance path</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">6 Apr</div>
+          <div><div class="tl-obj">Supplier shortlist + outreach</div><div class="tl-output">5 suppliers contacted · tracker live</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">13 Apr</div>
+          <div><div class="tl-obj">CAD/ID brief + DFM checkpoint</div><div class="tl-output">CAD brief sent · DFM question list</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">20 Apr</div>
+          <div><div class="tl-obj">Prototype build 1</div><div class="tl-output">Appearance/ergonomic prototype ordered</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">27 Apr</div>
+          <div><div class="tl-obj">First prototype in-hand</div><div class="tl-output">Feedback notes · iteration list</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">4 May</div>
+          <div><div class="tl-obj">Iterate + converge</div><div class="tl-output">Prototype v2 direction</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">25 May</div>
+          <div><div class="tl-obj">Supplier narrowing</div><div class="tl-output">2 supplier finalists</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-week">8 Jun</div>
+          <div><div class="tl-obj">Launch readiness skeleton</div><div class="tl-output">Launch checklist v1</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decisions panel -->
+  <div class="panel">
+    <div class="panel-header" onclick="togglePanel(this.parentElement)">
+      <span class="panel-title">📝 Decisions log</span>
+      <span class="panel-chevron">▾</span>
+    </div>
+    <div class="panel-body">
+      <div class="panel-inner">
+        <table class="decisions-table">
+          <thead>
+            <tr><th>Decision</th><th>Chosen</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Brand name</td><td>tüth</td><td><span class="badge badge-done">Locked</span></td></tr>
+            <tr><td>Target age</td><td>3–8</td><td><span class="badge badge-done">Locked</span></td></tr>
+            <tr><td>Business model</td><td>Starter kit + subscription</td><td><span class="badge badge-done">Locked</span></td></tr>
+            <tr><td>Dispenser mechanism</td><td>Airless push-down pump</td><td><span class="badge badge-done">Locked</span></td></tr>
+            <tr><td>V1 hero SKU</td><td>Dispenser + compostable refill (draft)</td><td><span class="badge badge-pending">Needs lock</span></td></tr>
+            <tr><td>Trade mark filing</td><td>—</td><td><span class="badge badge-deferred">Deferred</span></td></tr>
+            <tr><td>Product classification</td><td>—</td><td><span class="badge badge-pending">Pending</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+  const TASKS = [
+    {
+      id: 'sku-review',
+      time: '30min',
+      title: 'Review + confirm V1 SKU statement',
+      output: 'tuth_v1_sku_statement.md — confirmed',
+      steps: [
+        'Open <strong>tuth_v1_sku_statement.md</strong> in your tüth folder',
+        'Read the one-sentence hero definition and the 10-item "not doing" list',
+        'Edit anything that looks wrong — do it directly in the file, or tell Claude "update the SKU statement"',
+        'When satisfied, say <strong>"the SKU is locked"</strong> in a new chat — this unblocks the PRD, compliance path, and all supplier work'
+      ],
+      prompt: '"Open tuth_v1_sku_statement.md and walk me through the V1 SKU definition. Flag anything that looks like a mistake or a missing decision, then ask me to confirm or change each point. Once I\'ve confirmed, update the file to mark it as locked and update TUTH_MASTER.md accordingly."'
+    },
+    {
+      id: 'claims',
+      time: '30min',
+      title: 'Draft claims guardrails',
+      output: 'claims_guardrails.md',
+      steps: [
+        'Open a new chat in this project',
+        'Paste the prompt below — Claude will draft the claims guardrails document',
+        'Review the output: check that the "will not claim" list is conservative enough',
+        'Save as <strong>claims_guardrails.md</strong> in your tüth folder'
+      ],
+      prompt: '"Draft a claims guardrails document for tüth v1. It should have two sections: (1) what tüth can claim, with the supporting basis for each claim, and (2) what tüth will not claim, with the reason. Focus on sustainability claims (compostable refills), child safety, and efficacy. Reference the CMA Green Claims Code and ASA toothpaste guidance. Keep it tight and decision-ready. Save as claims_guardrails.md."'
+    },
+    {
+      id: 'prp-structure',
+      time: '30min',
+      title: 'Create Prototype Readiness Pack structure',
+      output: 'tuth_prototype_readiness_pack_v1/ folder',
+      steps: [
+        'Open a new chat in this project',
+        'Paste the prompt below — Claude will create the folder structure with all 8 documents',
+        'Review the structure and confirm it covers what you\'d need to send to a prototype shop',
+        'Each document will have headings only — you\'ll fill them in over the coming weeks'
+      ],
+      prompt: '"Create the Prototype Readiness Pack folder structure for tüth v1. The folder should be called tuth_prototype_readiness_pack_v1 and contain 8 markdown files: 01_PRD_one_pager, 02_claims_guardrails, 03_compliance_path, 04_renders_and_references, 05_dimensions_and_ergonomics, 06_materials_preferences, 07_packaging_brief, 08_test_plan_v0. Each file should have a title heading, a one-sentence description of what it will contain, and clear placeholders. Pre-fill as much of 05 as possible from the mechanical spec v0.1."'
+    },
+    {
+      id: 'prd',
+      time: '1hr',
+      title: 'Draft PRD one-pager',
+      output: 'tuth_prototype_readiness_pack_v1/01_PRD_one_pager.md',
+      steps: [
+        'Complete the V1 SKU review first (30-min task above)',
+        'Open a new chat in this project',
+        'Paste the prompt below — Claude will draft the PRD from the mechanical spec + locked SKU',
+        'Review for completeness: check dimensions, mechanism, interface spec, and non-goals',r}
+        'Claude will save it directly to the Prototype Readiness Pack folder'
+      ],
+      prompt: '"Draft a one-page Product Requirements Document (PRD) for tüth v1. Draw from tuth-mechanical-spec-v01.docx and tuth_v1_sku_statement.md. The PRD should cover: product description (one paragraph), key dimensions and mechanism, cartridge interface spec, target user (age 3–8, UK), functional requirements, non-goals, open questions. Keep it to one page — decision-ready, not exploratory. Save as tuth_prototype_readiness_pack_v1/01_PRD_one_pager.md."'
+    },
+    {
+      id: 'suppliers',
+      time: '1hr',
+      title: 'Research 15 candidate suppliers',
+      output: 'tuth_supplier_tracker_v1.xlsx',
+      steps: [
+        'Open a new chat in this project',
+        'Paste the prompt below — Claude will research and build the tracker spreadsheet',
+        'Review the shortlist: check that suppliers are UK/EU-accessible and have relevant experience',
+        'Identify 1 per category to contact first'
+      ],
+      prompt: '"Research and build a supplier tracker for tüth v1. I need 15 candidates across three categories: 5 CAD/industrial design studios (consumer products for children or FMCG), 5 prototype shops or OEM manufacturers (injection moulding, ABS/PP, small-run), and 5 compostable packaging suppliers (tubes or cartridges, certified compostable). For each: company name, location, website, why relevant, estimated MOQ if findable, and contact email. Format as a spreadsheet and save as tuth_supplier_tracker_v1.xlsx in the tüth folder."'
+    },
+    {
+      id: 'compliance',
+      time: '1hr',
+      title: 'Draft compliance path memo',
+      output: 'tuth_prototype_readiness_pack_v1/03_compliance_path.md',
+      steps: [
+        'Complete the V1 SKU review first so the product classification is clear',
+        'Open a new chat in this project',
+        'Paste the prompt below — Claude will map the applicable regulatory obligations',
+        'Review and flag anything that will need a specialist (Responsible Person, safety assessor)',
+        'Claude will save it to the Prototype Readiness Pack folder'
+      ],
+      prompt: '"Draft a compliance path memo for tüth v1 (UK market). The product is a mechanical toothpaste dispenser (hardware) with a compostable toothpaste refill cartridge (cosmetic product, fluoride-containing, age 3+). Map the applicable regulF���3�T�6�6�WF�72&VwV�F����&W7��6�&�RW'6����b��52��F�f�6F�����&V�Ɩ�r��vV�W&�&�GV7B6fWG�&VwV�F���2#R�4�w&VV�6���26�FR��B4F��F�7FRwV�F�6R�f�"V6�&VwV�F���v�B�B&WV�&W2�'�v�V��W7F��FVB6�7B��Bv�WF�W"W�FW&���V��2�VVFVB�f�rT�sF���6fWG�6��6�FW&F���2v�fV�F�R6�&7FW"��VBFW6�v��6fR2GWF��&�F�G�U�&VF��W75�6��c�5�6��Ɩ�6U�F���B�"p�������C�v�WG&V6�r��F��S�vF���rr��F�F�S�u6V�BR7WƖW"�WG&V6�V���2r���WGWC�sRV���26V�B+r7WƖW"G&6�W"WFFVBr��7FW3���t6���WFRF�R7WƖW"&W6V&6�F6�f�'7B�ֆ�W"F6�&�fR�r��t�V�F�R7WƖW"G&6�W"�B�6�g&��V6�6FVv�'�F�6��F7Bf�'7Br��t�V���W"V���6ƖV�B�v��r��t6��F�RFV��FR6�VFRG&gFVB�W'6��Ɨ6RV6���R�"֖�V6��(	B6��vRF�R6�����R�B��R7V6�f�2FWF��r��u6V�B�F�V��&�V6�2$6��F7FVB"��F�RG&6�W"v�F�F�F��w2FFRp����&��C�r%w&�FR7WƖW"�WG&V6�V���FV��FRf�"L;�F����v�&R�6VVBf�V�FW"'V��F��r6���G&V��w2�V6��6�F��F�7FRF�7V�6W"v�F�6���7F&�R&Vf���6'G&�FvR�F�RV���6��V�B&S�V�FW"Sv�&G2�&�fW76�����BF�&V7B���6�VFRv�BF�R&�GV7B�2�F�BvU�w&RB&�F�G�R7FvR��BF�B��v�������rf�"6��fW'6F���&�WBfV6�&�ƗG��B&�Vv����&�6��r�w&�FR��RfW'6���f�"FW6�v���B7GVF��2�B��Rf�"�T���Vf7GW&W'2���RF�V�6�V�BƖ�R&V�f�V�FW"(	B��B6�'�&FR'&�Vb�"p�������C�v6��2r��F��S�vF���rr��F�F�S�t&���"7WƖW"��G&�6��2r���WGWC�s"6��2��6�V�F"r��7FW3���uv�BV�F��B�V7B"7WƖW'2�fR&WƖVBF���W"�WG&V6�V���2r��u&WǒF�V6�6��f�&֖�r3�֖�WFR��G&�GV7F�'�6��r��tFBF���W"6�V�F"v�F�&W��FS�$'&��r$B��R�vW"��V6��6�7V2c�"r��tgFW"V6�6�����r��FW2�B�W�B7FW��F�R7WƖW"G&6�W"p����&��C�r%w&�FR&WǒV���F�7WƖW"v���2&W7��FVB�6�F�fVǒF�גL;�F��WG&V6��B�2�V�F�6���6��f�&�3�֖�WFR��G&�6���7VvvW7B"F��R6��G2��F�R�W�BvVV���B'&�Vfǒ��FRv�B��v��'&��r�&�GV7B'&�Vb�7V26�VWB���VW�B6��'B�B&�fW76�����"p�ТӰ��6��7Bd��DU%��U��wGWF��f��FW"s��6��7BD��U��U��wGWF��F��U�F6�2s����WB7W'&V�Df��FW"�v��s���gV�7F���vWDF��R����G'��&WGW&��4���'6R���6�7F�&vR�vWD�FV҄D��U��U������Ӳ�6F6��&WGW&��ӲТР�gV�7F���6fTF��R�'"���G'����6�7F�&vR�6WD�FV҄D��U��U���4���7G&��v�g��'"����6F6��ТР�gV�7F���6WDf��FW"�b�V��7W'&V�Df��FW"�c��F�7V�V�B�VW'�6V�V7F�$�r�f��FW"����r��f�$V6�����6�74Ɨ7B�&V��fR�v7F�fRr����V��6�74Ɨ7B�FB�v7F�fRr���&V�FW%F6�2����Р�gV�7F���F�vv�TF��R��B�R���R�7F�&�vF��ₓ���WBF��R�vWDF��R�����b�F��R��6�VFW2��B����F��R�F��R�f��FW"��������B����V�6R��F��R�W6���B���Т6fTF��R�F��R���&V�FW%F6�2����Р�gV�7F���F�vv�TW��B��B���6��7B6&B�F�7V�V�B�vWDV�V�V�D'��B�wF2�r��B����b�6&B�6&B�6�74Ɨ7B�F�vv�R�v�V�r���Р�gV�7F���6��F6�&��B��B�'F���6��7BF6��D4�2�f��B�B��B�B����B����b�F6��&WGW&㰢w&�FUF�6Ɨ&�&B�F6��&��B�'F���W�DV�V�V�E6�&Ɩ�r���Р�gV�7F���6��f�7W5&��B�'F���6��7BFW�B�F�7V�V�B�vWDV�V�V�D'��B�vf�7W2�&��B�FW�Br��FW�D6��FV�C��w&�FUF�6Ɨ&�&B�FW�B�F�7V�V�B�vWDV�V�V�D'��B�vf�7W2�6�����r����Р�gV�7F���w&�FUF�6Ɨ&�&B�FW�B�6��f�&�V��6��7BF��R��������b�6��f�&�V��6��f�&�V��6�74Ɨ7B�FB�w6��rr���6WEF��V�WB�����6��f�&�V��6�74Ɨ7B�&V��fR�w6��rr��##���ТӰ��b��f�vF�"�6Ɨ&�&B����f�vF�"�6Ɨ&�&B�w&�FUFW�B�FW�B��F�V�F��R��6F6������f��&6�6���FW�B�F��R�����V�6R��f��&6�6���FW�B�F��R���ТР�gV�7F���f��&6�6���FW�B�6"���6��7BV��F�7V�V�B�7&VFTV�V�V�B�wFW�F&Vr���V��f�VR�FW�C��V��7G��R��6�F����vf��VBs��V��7G��R��6�G��ss��F�7V�V�B�&�G��V�D6���B�V��V��f�7W2���V��6V�V7B����G'��F�7V�V�B�W�V46����B�v6��r��6"����6F6��ТF�7V�V�B�&�G��&V��fT6���B�V��Р�gV�7F���F�vv�U�V�V�V���V�V��6�74Ɨ7B�F�vv�R�v�V�r���Р�gV�7F���F��T�&VB���&WGW&��s3֖�s�s3֖�r�s�"s�s��W"r�vF���rs�tF���r��rշE���C��Р�gV�7F���Ft6�72�B���&WGW&��s3֖�s�wFr�3r�s�"s�wFr��"r�vF���rs�wFr�F�rշE���rs��Р�gV�7F���&V�FW%F6�2����6��7BF��R�vWDF��R����6��7Bf��FW&VB�7W'&V�Df��FW"���v��r�D4�2�D4�2�f��FW"�B��B�F��R���7W'&V�Df��FW"����6��7Bw&�W2�����W��s3֖�r��&Vâ~(�3֖�WFW2r�F6�3�f��FW&VB�f��FW"�B��B�F��R���s3֖�r������W��s�"r��&Vâ~(�2��W"r�F6�3�f��FW&VB�f��FW"�B��B�F��R���s�"r������W��vF���rr��&Vâ	�HF���r��r�F6�3�f��FW&VB�f��FW"�B��B�F��R���vF���rr�Т��f��FW"�r��r�F6�2��V�wF������6��7B6��F��W"�F�7V�V�B�vWDV�V�V�D'��B�wF6��Ɨ7Br����WB�F���rs���f�"�6��7Bw&�W�bw&�W2����F�����F�b6�73�'F6��w&�W#����b�7W'&V�Df��FW"���v��r����F�����F�b6�73�'F6��w&�W��&V�#�G�w&�W��&V����F�c���Р�f�"�6��7BF6��bw&�W�F6�2���6��7B�4F��R�F��R��6�VFW2�F6��B���6��7B7FW4�F���F6��7FW2���2���Ɠ�G�7���Ɠ������rr�����F���� ��F�b6�73�'F6��6&BG��4F��R�v6���WFVBr�rw�"�C�'F2�G�F6��G�#��F�b6�73�'F6�ֆVFW""��6Ɩ6��'F�vv�TW��B�rG�F6��G�r�#��F�b6�73�'F6��6�V6�G��4F��R�v6�V6�VBr�rw�"��6Ɩ6��'F�vv�TF��R�rG�F6��G�r�WfV�B�"F�F�S�"G��4F��R�t�&���6���WFRr�t�&�6���WFRw�#���F�c��F�b6�73�'F6�֖�f�#��F�b6�73�'F6��F�F�R#�G�F6��F�F�W���F�c��F�b6�73�'F6���WGWB#��WGWC�G�F6���WGWG���F�c���F�c��F�b6�73�'F6��Fw2#��7�6�73�'FrG�Ft6�72�F6��F��R��#�G�F��T�&VF6��F��R����7����F�c��F�b6�73�&W��B֖6��#�)k���F�c���F�c��F�b6�73�'F6��&�G�#��F�b6�73�'F6��&�G�֖��W"#��F�b6�73�'7FW2��&V�#��rF�W�V7WFS��F�c����6�73�'7FW2�Ɨ7B#�G�7FW4�F���������F�b6�73�'&��B�&��#��F�b6�73�'&��B�&����&V�#�6�F��2F�6�VFR��Wr6�B��F��2&��V7B���F�c��F�b6�73�'&��B�&���FW�B#�G�F6��&��G���F�c���F�c��F�b6�73�&'F��&�r#��'WGF��6�73�&'F�'F��F&�"7G��S�&f��B�6��S�'��FF��s���G��"��6Ɩ6��&6��F6�&��B�rG�F6��G�r�F��2�#�6��&��C��'WGF����7�6�73�&6���6��f�&�#�6��VB��7����F�c���F�c���F�c���F�c���Р��F������F�c���Р��b��F����F����F�b7G��S�'FW�B�Ɩv�6V�FW#�FF��s�C�#���6�G���CS�f��B�vV�v�C�c�#���F6�2f�"F��2f��FW"���F�c���Р�6��F��W"���W$�D����F�ð�Р���6WBFFP��gV�7F�������6��7BB��WrFFR����6��7B���F�2��t��r�tfV"r�t�"r�t"r�t��r�t�V�r�t�V�r�tVrr�u6Wr�t�7Br�t��br�tFV2uӰ�F�7V�V�B�vWDV�V�V�D'��B�wF�F��FFRr��FW�D6��FV�B�G�B�vWDFFR���G����F�5�B�vWD���F�����G�B�vWDgV�ŖV"�����Ғ�����&V�FW%F6�2������67&�Cࠣ��&�G�����F���
