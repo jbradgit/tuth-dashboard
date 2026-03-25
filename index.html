@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>tüth — Project Dashboard</title>
+  <title>tÃ¼th â Project Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -232,6 +232,9 @@
       color: rgba(255,255,255,0.85);
       line-height: 1.55;
       font-style: italic;
+      user-select: all;
+      -webkit-user-select: all;
+      cursor: text;
     }
 
     .btn-row {
@@ -264,6 +267,7 @@
 
     .btn-dark { background: var(--dark); color: var(--lime); }
     .btn-white { background: var(--white); color: var(--dark); }
+    .btn-lime { background: var(--lime); color: var(--dark); }
 
     .copy-confirm {
       font-size: 12px;
@@ -300,8 +304,8 @@
     .filter-pill:hover { background: #f0eeee; }
 
     .filter-pill.active {
-      background: var(--dark);
-      color: var(--lime);
+      background: var(--lime);
+      color: var(--dark);
     }
 
     .filter-pill:active {
@@ -360,7 +364,7 @@
     .task-check.checked { background: var(--dark); }
 
     .task-check.checked::after {
-      content: '✓';
+      content: 'â';
       color: var(--lime);
       font-size: 12px;
       font-weight: 700;
@@ -393,6 +397,7 @@
       border: 2px solid var(--dark);
     }
 
+    .tag-15 { background: var(--green); color: #fff; }
     .tag-30 { background: var(--yellow); }
     .tag-1hr { background: var(--orange); color: #fff; }
     .tag-dip { background: var(--blue); color: #fff; }
@@ -457,6 +462,9 @@
       font-size: 12.5px;
       font-style: italic;
       line-height: 1.55;
+      user-select: all;
+      -webkit-user-select: all;
+      cursor: text;
     }
 
     /* Panels */
@@ -667,7 +675,7 @@
       </div>
       <div class="usage-step">
         <div class="usage-num">2</div>
-        <div class="usage-text">Click any task card to expand it — steps and a ready-to-paste Claude prompt appear</div>
+        <div class="usage-text">Click any task card to expand it â steps and a ready-to-paste Claude prompt appear</div>
       </div>
       <div class="usage-step">
         <div class="usage-num">3</div>
@@ -675,7 +683,7 @@
       </div>
       <div class="usage-step">
         <div class="usage-num">4</div>
-        <div class="usage-text">Tick the checkbox when done — progress saves automatically</div>
+        <div class="usage-text">Tick the checkbox when done â progress saves automatically</div>
       </div>
     </div>
   </div>
@@ -684,14 +692,14 @@
   <div class="focus-card fade-up delay-2">
     <div class="focus-label">Your next action</div>
     <div class="focus-title">Review V1 SKU statement</div>
-    <div class="focus-meta">⏱ 30 min &nbsp;·&nbsp; Output: tuth_v1_sku_statement.md confirmed</div>
+    <div class="focus-meta">â± 30 min &nbsp;Â·&nbsp; Output: V1 SKU statement confirmed</div>
     <div class="focus-steps">
       <div class="focus-steps-label">How to execute</div>
       <ol>
-        <li>Open <strong>tuth_v1_sku_statement.md</strong> in your tüth folder</li>
-        <li>Read the one-sentence definition and the 10-item "not doing" list</li>
-        <li>Change anything that looks wrong — edit directly, or tell Claude "update the SKU statement"</li>
-        <li>When you're happy with it, say <strong>"the SKU is locked"</strong> — this unblocks the PRD, compliance path, and supplier research</li>
+        <li>Open a new chat in this project and paste the prompt below</li>
+        <li>Claude will walk you through the SKU definition point by point</li>
+        <li>Confirm or push back on anything that looks wrong â just reply in the chat</li>
+        <li>When you're happy, say <strong>"the SKU is locked"</strong> â this unblocks the PRD, compliance path, and supplier research</li>
       </ol>
     </div>
     <div class="focus-prompt">
@@ -707,9 +715,10 @@
   <!-- Time filter -->
   <div class="filter-row fade-up delay-3">
     <button class="filter-pill active" onclick="setFilter('all', this)">All tasks</button>
-    <button class="filter-pill" onclick="setFilter('30min', this)">⏱ 30 min</button>
-    <button class="filter-pill" onclick="setFilter('1hr', this)">⏳ 1 hour</button>
-    <button class="filter-pill" onclick="setFilter('dipping', this)">🔁 Dipping in</button>
+    <button class="filter-pill" onclick="setFilter('15min', this)">â¡ 15 min</button>
+    <button class="filter-pill" onclick="setFilter('30min', this)">â± 30 min</button>
+    <button class="filter-pill" onclick="setFilter('1hr', this)">â³ 1 hour</button>
+    <button class="filter-pill" onclick="setFilter('dipping', this)">ð Dipping in</button>
   </div>
 
   <!-- Task list -->
@@ -718,8 +727,8 @@
   <!-- Blockers panel -->
   <div class="panel open">
     <div class="panel-header" onclick="togglePanel(this.parentElement)">
-      <span class="panel-title">🚨 Blockers</span>
-      <span class="panel-chevron">▾</span>
+      <span class="panel-title">ð¨ Blockers</span>
+      <span class="panel-chevron">â¾</span>
     </div>
     <div class="panel-body">
       <div class="panel-inner">
@@ -727,8 +736,8 @@
           <div class="blocker-dot dot-red"></div>
           <div>
             <div class="blocker-title">V1 SKU not confirmed</div>
-            <div class="blocker-impact">Blocks PRD, compliance path, supplier research, and CAD brief — everything downstream</div>
-            <div class="blocker-action">→ Review tuth_v1_sku_statement.md and say "SKU is locked"</div>
+            <div class="blocker-impact">Blocks PRD, compliance path, supplier research, and CAD brief â everything downstream</div>
+            <div class="blocker-action">â Use the "Review V1 SKU" task above and say "SKU is locked"</div>
           </div>
         </div>
         <div class="blocker">
@@ -736,15 +745,15 @@
           <div>
             <div class="blocker-title">No supplier contacts yet</div>
             <div class="blocker-impact">Can't price the product, can't get samples, can't commission a prototype</div>
-            <div class="blocker-action">→ 1-hour task: research 15 candidate suppliers</div>
+            <div class="blocker-action">â 1-hour task: research 15 candidate suppliers</div>
           </div>
         </div>
         <div class="blocker">
           <div class="blocker-dot dot-orange"></div>
           <div>
             <div class="blocker-title">Product classification undecided</div>
-            <div class="blocker-impact">Can't map compliance obligations — affects Responsible Person, PIF, OPSS notification</div>
-            <div class="blocker-action">→ Resolve after SKU lock (30 min)</div>
+            <div class="blocker-impact">Can't map compliance obligations â affects Responsible Person, PIF, OPSS notification</div>
+            <div class="blocker-action">â Resolve after SKU lock (30 min)</div>
           </div>
         </div>
       </div>
@@ -754,22 +763,22 @@
   <!-- Status panel -->
   <div class="panel">
     <div class="panel-header" onclick="togglePanel(this.parentElement)">
-      <span class="panel-title">📊 Project status</span>
-      <span class="panel-chevron">▾</span>
+      <span class="panel-title">ð Project status</span>
+      <span class="panel-chevron">â¾</span>
     </div>
     <div class="panel-body">
       <div class="panel-inner">
         <div class="status-grid">
-          <div class="status-item"><div class="status-area">Brand identity</div><div class="status-val col-done">✓ Done</div></div>
-          <div class="status-item"><div class="status-area">Visual system</div><div class="status-val col-done">✓ Done</div></div>
-          <div class="status-item"><div class="status-area">V1 SKU statement</div><div class="status-val col-active">⬤ Draft — needs lock</div></div>
-          <div class="status-item"><div class="status-area">Mechanical spec</div><div class="status-val col-done">✓ v0.1 done</div></div>
-          <div class="status-item"><div class="status-area">Financial model</div><div class="status-val col-done">✓ Done</div></div>
-          <div class="status-item"><div class="status-area">Landing page</div><div class="status-val col-done">✓ Live</div></div>
-          <div class="status-item"><div class="status-area">Prototype readiness pack</div><div class="status-val col-pending">○ Not started</div></div>
-          <div class="status-item"><div class="status-area">Supplier pipeline</div><div class="status-val col-pending">○ Not started</div></div>
-          <div class="status-item"><div class="status-area">Compliance path</div><div class="status-val col-pending">○ Not started</div></div>
-          <div class="status-item"><div class="status-area">Trade mark filing</div><div class="status-val col-pending">○ Deferred</div></div>
+          <div class="status-item"><div class="status-area">Brand identity</div><div class="status-val col-done">â Done</div></div>
+          <div class="status-item"><div class="status-area">Visual system</div><div class="status-val col-done">â Done</div></div>
+          <div class="status-item"><div class="status-area">V1 SKU statement</div><div class="status-val col-active">â¬¤ Draft â needs lock</div></div>
+          <div class="status-item"><div class="status-area">Mechanical spec</div><div class="status-val col-done">â v0.1 done</div></div>
+          <div class="status-item"><div class="status-area">Financial model</div><div class="status-val col-done">â Done</div></div>
+          <div class="status-item"><div class="status-area">Landing page</div><div class="status-val col-done">â Live</div></div>
+          <div class="status-item"><div class="status-area">Prototype readiness pack</div><div class="status-val col-pending">â Not started</div></div>
+          <div class="status-item"><div class="status-area">Supplier pipeline</div><div class="status-val col-pending">â Not started</div></div>
+          <div class="status-item"><div class="status-area">Compliance path</div><div class="status-val col-pending">â Not started</div></div>
+          <div class="status-item"><div class="status-area">Trade mark filing</div><div class="status-val col-pending">â Deferred</div></div>
         </div>
       </div>
     </div>
@@ -778,26 +787,26 @@
   <!-- Timeline panel -->
   <div class="panel">
     <div class="panel-header" onclick="togglePanel(this.parentElement)">
-      <span class="panel-title">📅 12-week plan</span>
-      <span class="panel-chevron">▾</span>
+      <span class="panel-title">ð 12-week plan</span>
+      <span class="panel-chevron">â¾</span>
     </div>
     <div class="panel-body">
       <div class="panel-inner">
         <div class="timeline-item">
           <div class="tl-week">23 Mar</div>
-          <div><div class="tl-obj">MVP lock + IP timing <span class="now-badge">NOW</span></div><div class="tl-output">V1 SKU statement · trade mark decision</div></div>
+          <div><div class="tl-obj">MVP lock + IP timing <span class="now-badge">NOW</span></div><div class="tl-output">V1 SKU statement Â· trade mark decision</div></div>
         </div>
         <div class="timeline-item">
           <div class="tl-week">30 Mar</div>
-          <div><div class="tl-obj">Prototype Readiness Pack v1</div><div class="tl-output">PRD · claims guardrails · compliance path</div></div>
+          <div><div class="tl-obj">Prototype Readiness Pack v1</div><div class="tl-output">PRD Â· claims guardrails Â· compliance path</div></div>
         </div>
         <div class="timeline-item">
           <div class="tl-week">6 Apr</div>
-          <div><div class="tl-obj">Supplier shortlist + outreach</div><div class="tl-output">5 suppliers contacted · tracker live</div></div>
+          <div><div class="tl-obj">Supplier shortlist + outreach</div><div class="tl-output">5 suppliers contacted Â· tracker live</div></div>
         </div>
         <div class="timeline-item">
           <div class="tl-week">13 Apr</div>
-          <div><div class="tl-obj">CAD/ID brief + DFM checkpoint</div><div class="tl-output">CAD brief sent · DFM question list</div></div>
+          <div><div class="tl-obj">CAD/ID brief + DFM checkpoint</div><div class="tl-output">CAD brief sent Â· DFM question list</div></div>
         </div>
         <div class="timeline-item">
           <div class="tl-week">20 Apr</div>
@@ -805,7 +814,7 @@
         </div>
         <div class="timeline-item">
           <div class="tl-week">27 Apr</div>
-          <div><div class="tl-obj">First prototype in-hand</div><div class="tl-output">Feedback notes · iteration list</div></div>
+          <div><div class="tl-obj">First prototype in-hand</div><div class="tl-output">Feedback notes Â· iteration list</div></div>
         </div>
         <div class="timeline-item">
           <div class="tl-week">4 May</div>
@@ -826,8 +835,8 @@
   <!-- Decisions panel -->
   <div class="panel">
     <div class="panel-header" onclick="togglePanel(this.parentElement)">
-      <span class="panel-title">📝 Decisions log</span>
-      <span class="panel-chevron">▾</span>
+      <span class="panel-title">ð Decisions log</span>
+      <span class="panel-chevron">â¾</span>
     </div>
     <div class="panel-body">
       <div class="panel-inner">
@@ -836,13 +845,13 @@
             <tr><th>Decision</th><th>Chosen</th><th>Status</th></tr>
           </thead>
           <tbody>
-            <tr><td>Brand name</td><td>tüth</td><td><span class="badge badge-done">Locked</span></td></tr>
-            <tr><td>Target age</td><td>3–8</td><td><span class="badge badge-done">Locked</span></td></tr>
+            <tr><td>Brand name</td><td>tÃ¼th</td><td><span class="badge badge-done">Locked</span></td></tr>
+            <tr><td>Target age</td><td>3â8</td><td><span class="badge badge-done">Locked</span></td></tr>
             <tr><td>Business model</td><td>Starter kit + subscription</td><td><span class="badge badge-done">Locked</span></td></tr>
             <tr><td>Dispenser mechanism</td><td>Airless push-down pump</td><td><span class="badge badge-done">Locked</span></td></tr>
             <tr><td>V1 hero SKU</td><td>Dispenser + compostable refill (draft)</td><td><span class="badge badge-pending">Needs lock</span></td></tr>
-            <tr><td>Trade mark filing</td><td>—</td><td><span class="badge badge-deferred">Deferred</span></td></tr>
-            <tr><td>Product classification</td><td>—</td><td><span class="badge badge-pending">Pending</span></td></tr>
+            <tr><td>Trade mark filing</td><td>â</td><td><span class="badge badge-deferred">Deferred</span></td></tr>
+            <tr><td>Product classification</td><td>â</td><td><span class="badge badge-pending">Pending</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -854,30 +863,56 @@
 <script>
   const TASKS = [
     {
+      id: 'elevator-pitch',
+      time: '15min',
+      title: 'Write a one-sentence product pitch',
+      output: 'Ready-to-use intro line for supplier calls and conversations',
+      steps: [
+        'Open a new chat in this project',
+        'Paste the prompt below',
+        'Review the 3 options Claude writes',
+        'Pick one (or blend two) â you\'ll use this in supplier emails and investor chats'
+      ],
+      prompt: '"Write 3 versions of a one-sentence product pitch for tÃ¼th. Each should work as an intro you\'d say to a supplier or investor. Vary the angle: one factual, one character-led, one sustainability-first. Under 25 words each. Use British English."'
+    },
+    {
+      id: 'character-name',
+      time: '15min',
+      title: 'Name the first tÃ¼th character',
+      output: 'Character name decided',
+      steps: [
+        'Open a new chat in this project',
+        'Paste the prompt below â Claude will give you 10 name options',
+        'Pick the one that feels right for a 3â8 year old',
+        'Reply "name locked: [name]" to confirm it'
+      ],
+      prompt: '"Generate 10 name options for the first tÃ¼th character â the character that lives in the dispenser and comes out when the child brushes. Names should: be easy for a 3â8 year old to say, feel original (not an existing character name), have a fun sound, work in British English, and avoid obvious trademark conflicts. For each, write one sentence on the personality it suggests."'
+    },
+    {
       id: 'sku-review',
       time: '30min',
       title: 'Review + confirm V1 SKU statement',
-      output: 'tuth_v1_sku_statement.md — confirmed',
+      output: 'V1 SKU statement confirmed',
       steps: [
-        'Open <strong>tuth_v1_sku_statement.md</strong> in your tüth folder',
-        'Read the one-sentence hero definition and the 10-item "not doing" list',
-        'Edit anything that looks wrong — do it directly in the file, or tell Claude "update the SKU statement"',
-        'When satisfied, say <strong>"the SKU is locked"</strong> in a new chat — this unblocks the PRD, compliance path, and all supplier work'
+        'Open a new chat in this project and paste the prompt below',
+        'Claude will walk you through the SKU definition point by point',
+        'Confirm or push back on anything that looks wrong â just reply in the chat',
+        'When satisfied, say <strong>"the SKU is locked"</strong> â this unblocks the PRD, compliance path, and all supplier work'
       ],
-      prompt: '"Open tuth_v1_sku_statement.md and walk me through the V1 SKU definition. Flag anything that looks like a mistake or a missing decision, then ask me to confirm or change each point. Once I\'ve confirmed, update the file to mark it as locked and update TUTH_MASTER.md accordingly."'
+      prompt: '"Open tuth_v1_sku_statement.md and walk me through the V1 SKU definition. Flag anything that looks like a mistake or a missing decision, then ask me to confirm or change each point. Once I\'ve confirmed everything, mark it as locked."'
     },
     {
       id: 'claims',
       time: '30min',
       title: 'Draft claims guardrails',
-      output: 'claims_guardrails.md',
+      output: 'Claims guardrails document',
       steps: [
         'Open a new chat in this project',
-        'Paste the prompt below — Claude will draft the claims guardrails document',
+        'Paste the prompt below â Claude will draft the claims guardrails document',
         'Review the output: check that the "will not claim" list is conservative enough',
-        'Save as <strong>claims_guardrails.md</strong> in your tüth folder'
+        'Tell Claude "save it" â it will save to your tÃ¼th folder automatically'
       ],
-      prompt: '"Draft a claims guardrails document for tüth v1. It should have two sections: (1) what tüth can claim, with the supporting basis for each claim, and (2) what tüth will not claim, with the reason. Focus on sustainability claims (compostable refills), child safety, and efficacy. Reference the CMA Green Claims Code and ASA toothpaste guidance. Keep it tight and decision-ready. Save as claims_guardrails.md."'
+      prompt: '"Draft a claims guardrails document for tÃ¼th v1. Two sections: (1) what tÃ¼th can claim, with the supporting basis for each claim, and (2) what tÃ¼th will not claim, with the reason. Focus on sustainability claims (compostable refills), child safety, and efficacy. Reference the CMA Green Claims Code and ASA toothpaste guidance. Keep it tight and decision-ready. Save it to the tÃ¼th folder."'
     },
     {
       id: 'prp-structure',
@@ -886,25 +921,25 @@
       output: 'tuth_prototype_readiness_pack_v1/ folder',
       steps: [
         'Open a new chat in this project',
-        'Paste the prompt below — Claude will create the folder structure with all 8 documents',
+        'Paste the prompt below â Claude will create the folder structure with all 8 documents',
         'Review the structure and confirm it covers what you\'d need to send to a prototype shop',
-        'Each document will have headings only — you\'ll fill them in over the coming weeks'
+        'Each document will have headings only â you\'ll fill them in over the coming weeks'
       ],
-      prompt: '"Create the Prototype Readiness Pack folder structure for tüth v1. The folder should be called tuth_prototype_readiness_pack_v1 and contain 8 markdown files: 01_PRD_one_pager, 02_claims_guardrails, 03_compliance_path, 04_renders_and_references, 05_dimensions_and_ergonomics, 06_materials_preferences, 07_packaging_brief, 08_test_plan_v0. Each file should have a title heading, a one-sentence description of what it will contain, and clear placeholders. Pre-fill as much of 05 as possible from the mechanical spec v0.1."'
+      prompt: '"Create the Prototype Readiness Pack folder structure for tÃ¼th v1 in the tÃ¼th folder. Call it tuth_prototype_readiness_pack_v1 and create 8 documents inside it: 01_PRD_one_pager, 02_claims_guardrails, 03_compliance_path, 04_renders_and_references, 05_dimensions_and_ergonomics, 06_materials_preferences, 07_packaging_brief, 08_test_plan_v0. Each should have a title, a one-sentence description, and clear placeholders. Pre-fill as much of 05 as possible from the mechanical spec."'
     },
     {
       id: 'prd',
       time: '1hr',
       title: 'Draft PRD one-pager',
-      output: 'tuth_prototype_readiness_pack_v1/01_PRD_one_pager.md',
+      output: 'PRD one-pager (saved to your tÃ¼th folder)',
       steps: [
         'Complete the V1 SKU review first (30-min task above)',
         'Open a new chat in this project',
-        'Paste the prompt below — Claude will draft the PRD from the mechanical spec + locked SKU',
-        'Review for completeness: check dimensions, mechanism, interface spec, and non-goals',r}
+        'Paste the prompt below â Claude will draft the PRD from the mechanical spec + locked SKU',
+        'Review for completeness: check dimensions, mechanism, interface spec, and non-goals',
         'Claude will save it directly to the Prototype Readiness Pack folder'
       ],
-      prompt: '"Draft a one-page Product Requirements Document (PRD) for tüth v1. Draw from tuth-mechanical-spec-v01.docx and tuth_v1_sku_statement.md. The PRD should cover: product description (one paragraph), key dimensions and mechanism, cartridge interface spec, target user (age 3–8, UK), functional requirements, non-goals, open questions. Keep it to one page — decision-ready, not exploratory. Save as tuth_prototype_readiness_pack_v1/01_PRD_one_pager.md."'
+      prompt: '"Draft a one-page Product Requirements Document (PRD) for tÃ¼th v1. Draw from tuth-mechanical-spec-v01.docx and tuth_v1_sku_statement.md. The PRD should cover: product description (one paragraph), key dimensions and mechanism, cartridge interface spec, target user (age 3â8, UK), functional requirements, non-goals, and open questions. Keep it to one page â decision-ready, not exploratory. Save as tuth_prototype_readiness_pack_v1/01_PRD_one_pager.md."'
     },
     {
       id: 'suppliers',
@@ -913,22 +948,212 @@
       output: 'tuth_supplier_tracker_v1.xlsx',
       steps: [
         'Open a new chat in this project',
-        'Paste the prompt below — Claude will research and build the tracker spreadsheet',
+        'Paste the prompt below â Claude will research and build the tracker spreadsheet',
         'Review the shortlist: check that suppliers are UK/EU-accessible and have relevant experience',
         'Identify 1 per category to contact first'
       ],
-      prompt: '"Research and build a supplier tracker for tüth v1. I need 15 candidates across three categories: 5 CAD/industrial design studios (consumer products for children or FMCG), 5 prototype shops or OEM manufacturers (injection moulding, ABS/PP, small-run), and 5 compostable packaging suppliers (tubes or cartridges, certified compostable). For each: company name, location, website, why relevant, estimated MOQ if findable, and contact email. Format as a spreadsheet and save as tuth_supplier_tracker_v1.xlsx in the tüth folder."'
+      prompt: '"Research and build a supplier tracker for tÃ¼th v1. I need 15 candidates across three categories: 5 CAD/industrial design studios (consumer products for children or FMCG), 5 prototype shops or OEM manufacturers (injection moulding, ABS/PP, small-run), and 5 compostable packaging suppliers (tubes or cartridges, certified compostable). For each: company name, location, website, why relevant, estimated MOQ if findable, and contact email. Format as a spreadsheet and save as tuth_supplier_tracker_v1.xlsx in the tÃ¼th folder."'
     },
     {
       id: 'compliance',
       time: '1hr',
       title: 'Draft compliance path memo',
-      output: 'tuth_prototype_readiness_pack_v1/03_compliance_path.md',
+      output: 'Compliance path memo (saved to your tÃ¼th folder)',
       steps: [
         'Complete the V1 SKU review first so the product classification is clear',
         'Open a new chat in this project',
-        'Paste the prompt below — Claude will map the applicable regulatory obligations',
+        'Paste the prompt below â Claude will map the applicable regulatory obligations',
         'Review and flag anything that will need a specialist (Responsible Person, safety assessor)',
         'Claude will save it to the Prototype Readiness Pack folder'
       ],
-      prompt: '"Draft a compliance path memo for tüth v1 (UK market). The product is a mechanical toothpaste dispenser (hardware) with a compostable toothpaste refill cartridge (cosmetic product, fluoride-containing, age 3+). Map the applicable regulF���3�T�6�6�WF�72&VwV�F����&W7��6�&�RW'6����b��52��F�f�6F�����&V�Ɩ�r��vV�W&�&�GV7B6fWG�&VwV�F���2#R�4�w&VV�6���26�FR��B4F��F�7FRwV�F�6R�f�"V6�&VwV�F���v�B�B&WV�&W2�'�v�V��W7F��FVB6�7B��Bv�WF�W"W�FW&���V��2�VVFVB�f�rT�sF���6fWG�6��6�FW&F���2v�fV�F�R6�&7FW"��VBFW6�v��6fR2GWF��&�F�G�U�&VF��W75�6��c�5�6��Ɩ�6U�F���B�"p�������C�v�WG&V6�r��F��S�vF���rr��F�F�S�u6V�BR7WƖW"�WG&V6�V���2r���WGWC�sRV���26V�B+r7WƖW"G&6�W"WFFVBr��7FW3���t6���WFRF�R7WƖW"&W6V&6�F6�f�'7B�ֆ�W"F6�&�fR�r��t�V�F�R7WƖW"G&6�W"�B�6�g&��V6�6FVv�'�F�6��F7Bf�'7Br��t�V���W"V���6ƖV�B�v��r��t6��F�RFV��FR6�VFRG&gFVB�W'6��Ɨ6RV6���R�"֖�V6��(	B6��vRF�R6�����R�B��R7V6�f�2FWF��r��u6V�B�F�V��&�V6�2$6��F7FVB"��F�RG&6�W"v�F�F�F��w2FFRp����&��C�r%w&�FR7WƖW"�WG&V6�V���FV��FRf�"L;�F����v�&R�6VVBf�V�FW"'V��F��r6���G&V��w2�V6��6�F��F�7FRF�7V�6W"v�F�6���7F&�R&Vf���6'G&�FvR�F�RV���6��V�B&S�V�FW"Sv�&G2�&�fW76�����BF�&V7B���6�VFRv�BF�R&�GV7B�2�F�BvU�w&RB&�F�G�R7FvR��BF�B��v�������rf�"6��fW'6F���&�WBfV6�&�ƗG��B&�Vv����&�6��r�w&�FR��RfW'6���f�"FW6�v���B7GVF��2�B��Rf�"�T���Vf7GW&W'2���RF�V�6�V�BƖ�R&V�f�V�FW"(	B��B6�'�&FR'&�Vb�"p�������C�v6��2r��F��S�vF���rr��F�F�S�t&���"7WƖW"��G&�6��2r���WGWC�s"6��2��6�V�F"r��7FW3���uv�BV�F��B�V7B"7WƖW'2�fR&WƖVBF���W"�WG&V6�V���2r��u&WǒF�V6�6��f�&֖�r3�֖�WFR��G&�GV7F�'�6��r��tFBF���W"6�V�F"v�F�&W��FS�$'&��r$B��R�vW"��V6��6�7V2c�"r��tgFW"V6�6�����r��FW2�B�W�B7FW��F�R7WƖW"G&6�W"p����&��C�r%w&�FR&WǒV���F�7WƖW"v���2&W7��FVB�6�F�fVǒF�גL;�F��WG&V6��B�2�V�F�6���6��f�&�3�֖�WFR��G&�6���7VvvW7B"F��R6��G2��F�R�W�BvVV���B'&�Vfǒ��FRv�B��v��'&��r�&�GV7B'&�Vb�7V26�VWB���VW�B6��'B�B&�fW76�����"p�ТӰ��6��7Bd��DU%��U��wGWF��f��FW"s��6��7BD��U��U��wGWF��F��U�F6�2s����WB7W'&V�Df��FW"�v��s���gV�7F���vWDF��R����G'��&WGW&��4���'6R���6�7F�&vR�vWD�FV҄D��U��U������Ӳ�6F6��&WGW&��ӲТР�gV�7F���6fTF��R�'"���G'����6�7F�&vR�6WD�FV҄D��U��U���4���7G&��v�g��'"����6F6��ТР�gV�7F���6WDf��FW"�b�V��7W'&V�Df��FW"�c��F�7V�V�B�VW'�6V�V7F�$�r�f��FW"����r��f�$V6�����6�74Ɨ7B�&V��fR�v7F�fRr����V��6�74Ɨ7B�FB�v7F�fRr���&V�FW%F6�2����Р�gV�7F���F�vv�TF��R��B�R���R�7F�&�vF��ₓ���WBF��R�vWDF��R�����b�F��R��6�VFW2��B����F��R�F��R�f��FW"��������B����V�6R��F��R�W6���B���Т6fTF��R�F��R���&V�FW%F6�2����Р�gV�7F���F�vv�TW��B��B���6��7B6&B�F�7V�V�B�vWDV�V�V�D'��B�wF2�r��B����b�6&B�6&B�6�74Ɨ7B�F�vv�R�v�V�r���Р�gV�7F���6��F6�&��B��B�'F���6��7BF6��D4�2�f��B�B��B�B����B����b�F6��&WGW&㰢w&�FUF�6Ɨ&�&B�F6��&��B�'F���W�DV�V�V�E6�&Ɩ�r���Р�gV�7F���6��f�7W5&��B�'F���6��7BFW�B�F�7V�V�B�vWDV�V�V�D'��B�vf�7W2�&��B�FW�Br��FW�D6��FV�C��w&�FUF�6Ɨ&�&B�FW�B�F�7V�V�B�vWDV�V�V�D'��B�vf�7W2�6�����r����Р�gV�7F���w&�FUF�6Ɨ&�&B�FW�B�6��f�&�V��6��7BF��R��������b�6��f�&�V��6��f�&�V��6�74Ɨ7B�FB�w6��rr���6WEF��V�WB�����6��f�&�V��6�74Ɨ7B�&V��fR�w6��rr��##���ТӰ��b��f�vF�"�6Ɨ&�&B����f�vF�"�6Ɨ&�&B�w&�FUFW�B�FW�B��F�V�F��R��6F6������f��&6�6���FW�B�F��R�����V�6R��f��&6�6���FW�B�F��R���ТР�gV�7F���f��&6�6���FW�B�6"���6��7BV��F�7V�V�B�7&VFTV�V�V�B�wFW�F&Vr���V��f�VR�FW�C��V��7G��R��6�F����vf��VBs��V��7G��R��6�G��ss��F�7V�V�B�&�G��V�D6���B�V��V��f�7W2���V��6V�V7B����G'��F�7V�V�B�W�V46����B�v6��r��6"����6F6��ТF�7V�V�B�&�G��&V��fT6���B�V��Р�gV�7F���F�vv�U�V�V�V���V�V��6�74Ɨ7B�F�vv�R�v�V�r���Р�gV�7F���F��T�&VB���&WGW&��s3֖�s�s3֖�r�s�"s�s��W"r�vF���rs�tF���r��rշE���C��Р�gV�7F���Ft6�72�B���&WGW&��s3֖�s�wFr�3r�s�"s�wFr��"r�vF���rs�wFr�F�rշE���rs��Р�gV�7F���&V�FW%F6�2����6��7BF��R�vWDF��R����6��7Bf��FW&VB�7W'&V�Df��FW"���v��r�D4�2�D4�2�f��FW"�B��B�F��R���7W'&V�Df��FW"����6��7Bw&�W2�����W��s3֖�r��&Vâ~(�3֖�WFW2r�F6�3�f��FW&VB�f��FW"�B��B�F��R���s3֖�r������W��s�"r��&Vâ~(�2��W"r�F6�3�f��FW&VB�f��FW"�B��B�F��R���s�"r������W��vF���rr��&Vâ	�HF���r��r�F6�3�f��FW&VB�f��FW"�B��B�F��R���vF���rr�Т��f��FW"�r��r�F6�2��V�wF������6��7B6��F��W"�F�7V�V�B�vWDV�V�V�D'��B�wF6��Ɨ7Br����WB�F���rs���f�"�6��7Bw&�W�bw&�W2����F�����F�b6�73�'F6��w&�W#����b�7W'&V�Df��FW"���v��r����F�����F�b6�73�'F6��w&�W��&V�#�G�w&�W��&V����F�c���Р�f�"�6��7BF6��bw&�W�F6�2���6��7B�4F��R�F��R��6�VFW2�F6��B���6��7B7FW4�F���F6��7FW2���2���Ɠ�G�7���Ɠ������rr�����F���� ��F�b6�73�'F6��6&BG��4F��R�v6���WFVBr�rw�"�C�'F2�G�F6��G�#��F�b6�73�'F6�ֆVFW""��6Ɩ6��'F�vv�TW��B�rG�F6��G�r�#��F�b6�73�'F6��6�V6�G��4F��R�v6�V6�VBr�rw�"��6Ɩ6��'F�vv�TF��R�rG�F6��G�r�WfV�B�"F�F�S�"G��4F��R�t�&���6���WFRr�t�&�6���WFRw�#���F�c��F�b6�73�'F6�֖�f�#��F�b6�73�'F6��F�F�R#�G�F6��F�F�W���F�c��F�b6�73�'F6���WGWB#��WGWC�G�F6���WGWG���F�c���F�c��F�b6�73�'F6��Fw2#��7�6�73�'FrG�Ft6�72�F6��F��R��#�G�F��T�&VF6��F��R����7����F�c��F�b6�73�&W��B֖6��#�)k���F�c���F�c��F�b6�73�'F6��&�G�#��F�b6�73�'F6��&�G�֖��W"#��F�b6�73�'7FW2��&V�#��rF�W�V7WFS��F�c����6�73�'7FW2�Ɨ7B#�G�7FW4�F���������F�b6�73�'&��B�&��#��F�b6�73�'&��B�&����&V�#�6�F��2F�6�VFR��Wr6�B��F��2&��V7B���F�c��F�b6�73�'&��B�&���FW�B#�G�F6��&��G���F�c���F�c��F�b6�73�&'F��&�r#��'WGF��6�73�&'F�'F��F&�"7G��S�&f��B�6��S�'��FF��s���G��"��6Ɩ6��&6��F6�&��B�rG�F6��G�r�F��2�#�6��&��C��'WGF����7�6�73�&6���6��f�&�#�6��VB��7����F�c���F�c���F�c���F�c���Р��F������F�c���Р��b��F����F����F�b7G��S�'FW�B�Ɩv�6V�FW#�FF��s�C�#���6�G���CS�f��B�vV�v�C�c�#���F6�2f�"F��2f��FW"���F�c���Р�6��F��W"���W$�D����F�ð�Р���6WBFFP��gV�7F�������6��7BB��WrFFR����6��7B���F�2��t��r�tfV"r�t�"r�t"r�t��r�t�V�r�t�V�r�tVrr�u6Wr�t�7Br�t��br�tFV2uӰ�F�7V�V�B�vWDV�V�V�D'��B�wF�F��FFRr��FW�D6��FV�B�G�B�vWDFFR���G����F�5�B�vWD���F�����G�B�vWDgV�ŖV"�����Ғ�����&V�FW%F6�2������67&�Cࠣ��&�G�����F���
+      prompt: '"Draft a compliance path memo for tÃ¼th v1 (UK market). The product is a mechanical toothpaste dispenser (hardware) with a compostable toothpaste refill cartridge (cosmetic product, fluoride-containing, age 3+). Map the applicable regulations: UK Cosmetics Regulation (Responsible Person, PIF, OPSS notification, labelling), General Product Safety Regulations 2005, CMA Green Claims Code, and ASA toothpaste guidance. For each regulation: what it requires, by when, estimated cost, and whether external help is needed. Flag EN 71 toy-safety considerations given the character-led design. Save as tuth_prototype_readiness_pack_v1/03_compliance_path.md."'
+    },
+    {
+      id: 'outreach',
+      time: 'dipping',
+      title: 'Send 5 supplier outreach emails',
+      output: '5 emails sent Â· supplier tracker updated',
+      steps: [
+        'Complete the supplier research task first (1-hour task above)',
+        'Open the supplier tracker and pick 1 from each category to contact first',
+        'Open your email client (Gmail)',
+        'Copy the template Claude drafted, personalise each one (2 min each) â change the company name and one specific detail',
+        'Send, then mark each as "Contacted" in the tracker with today\'s date'
+      ],
+      prompt: '"Write a supplier outreach email template for tÃ¼th. I\'m a pre-seed founder building a children\'s mechanical toothpaste dispenser with a compostable refill cartridge. The email should be: under 150 words, professional and direct, include what the product is, that we\'re at prototype stage, and that I\'m looking for a conversation about feasibility and rough MOQ/pricing. Write one version for design/ID studios and one for OEM manufacturers. Make them sound like a real founder â not a corporate brief."'
+    },
+    {
+      id: 'calls',
+      time: 'dipping',
+      title: 'Book 2 supplier intro calls',
+      output: '2 calls in calendar',
+      steps: [
+        'Wait until at least 2 suppliers have replied to your outreach emails',
+        'Reply to each confirming a 30-minute introductory call',
+        'Add to your calendar with a prep note: "Bring PRD one-pager + mechanical spec v0.1"',
+        'After each call, log notes and next step in the supplier tracker'
+      ],
+      prompt: '"Write a reply email to a supplier who has responded positively to my tÃ¼th outreach and is open to a call. Confirm a 30-minute intro call, suggest 2 time slots in the next week, and briefly note what I\'ll bring (product brief + spec sheet). Keep it short and professional."'
+    }
+  ];
+
+  const FILTER_KEY = 'tuth_filter';
+  const DONE_KEY = 'tuth_done_tasks';
+
+  let currentFilter = 'all';
+
+  function getDone() {
+    try { return JSON.parse(localStorage.getItem(DONE_KEY)) || []; } catch { return []; }
+  }
+
+  function saveDone(arr) {
+    try { localStorage.setItem(DONE_KEY, JSON.stringify(arr)); } catch {}
+  }
+
+  function setFilter(f, el) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    renderTasks();
+  }
+
+  function toggleDone(id, e) {
+    e.stopPropagation();
+    let done = getDone();
+    if (done.includes(id)) {
+      done = done.filter(x => x !== id);
+    } else {
+      done.push(id);
+    }
+    saveDone(done);
+    renderTasks();
+  }
+
+  function toggleExpand(id) {
+    const card = document.getElementById('tc-' + id);
+    if (card) card.classList.toggle('open');
+  }
+
+  function copyTaskPrompt(id, btn) {
+    const task = TASKS.find(t => t.id === id);
+    if (!task) return;
+    writeToClipboard(task.prompt, btn.nextElementSibling);
+  }
+
+  function copyFocusPrompt(btn) {
+    const text = document.getElementById('focus-prompt-text').textContent;
+    writeToClipboard(text, document.getElementById('focus-copy-ok'));
+  }
+
+  function writeToClipboard(text, confirmEl) {
+    const done = () => {
+      if (confirmEl) {
+        confirmEl.classList.add('show');
+        setTimeout(() => confirmEl.classList.remove('show'), 2200);
+      }
+    };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+    } else {
+      fallbackCopy(text, done);
+    }
+  }
+
+  function fallbackCopy(text, cb) {
+    const el = document.createElement('textarea');
+    el.value = text;
+    el.style.position = 'fixed';
+    el.style.opacity = '0';
+    document.body.appendChild(el);
+    el.focus(); el.select();
+    try { document.execCommand('copy'); cb(); } catch {}
+    document.body.removeChild(el);
+  }
+
+  function togglePanel(panelEl) {
+    panelEl.classList.toggle('open');
+  }
+
+  function timeLabel(t) {
+    return { '15min': '15 min', '30min': '30 min', '1hr': '1 hour', 'dipping': 'Dipping in' }[t] || t;
+  }
+
+  function tagClass(t) {
+    return { '15min': 'tag-15', '30min': 'tag-30', '1hr': 'tag-1hr', 'dipping': 'tag-dip' }[t] || '';
+  }
+
+  function renderTasks() {
+    const done = getDone();
+    const filtered = currentFilter === 'all' ? TASKS : TASKS.filter(t => t.time === currentFilter);
+
+    const groups = [
+      { key: '30min', label: 'â± 30 minutes', tasks: filtered.filter(t => t.time === '30min') },
+      { key: '1hr',   label: 'â³ 1 hour',     tasks: filtered.filter(t => t.time === '1hr') },
+      { key: 'dipping', label: 'ð Dipping in', tasks: filtered.filter(t => t.time === 'dipping') }
+    ].filter(g => g.tasks.length > 0);
+
+    const container = document.getElementById('task-list');
+    let html = '';
+
+    for (const group of groups) {
+      html += `<div class="task-group">`;
+      if (currentFilter === 'all') {
+        html += `<div class="task-group-label">${group.label}</div>`;
+      }
+
+      for (const task of group.tasks) {
+        const isDone = done.includes(task.id);
+        const stepsHtml = task.steps.map(s => `<li>${s}</li>`).join('');
+
+        html += `
+        <div class="task-card ${isDone ? 'completed' : ''}" id="tc-${task.id}">
+          <div class="task-header" onclick="toggleExpand('${task.id}')">
+            <div class="task-check ${isDone ? 'checked' : ''}" onclick="toggleDone('${task.id}', event)" title="${isDone ? 'Mark incomplete' : 'Mark complete'}"></div>
+            <div class="task-info">
+              <div class="task-title">${task.title}</div>
+              <div class="task-output">Output: ${task.output}</div>
+            </div>
+            <div class="task-tags">
+              <span class="tag ${tagClass(task.time)}">${timeLabel(task.time)}</span>
+            </div>
+            <div class="expand-icon">â¾</div>
+          </div>
+          <div class="task-body">
+            <div class="task-body-inner">
+              <div class="steps-label">How to execute</div>
+              <ol class="steps-list">${stepsHtml}</ol>
+              <div class="prompt-box">
+                <div class="prompt-box-label">Say this to Claude (new chat in this project)</div>
+                <div class="prompt-box-text">${task.prompt}</div>
+              </div>
+              <div class="btn-row">
+                <button class="btn btn-lime" style="font-size:12px;padding:8px 14px;" onclick="copyTaskPrompt('${task.id}', this)">Copy prompt</button>
+                <span class="copy-confirm">Copied!</span>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      html += `</div>`;
+    }
+
+    if (!html) {
+      html = `<div style="text-align:center;padding:40px 20px;opacity:0.45;font-weight:600;">No tasks for this filter.</div>`;
+    }
+
+    container.innerHTML = html;
+  }
+
+  // Set date
+  (function () {
+    const d = new Date();
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('today-date').textContent = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  })();
+
+  renderTasks();
+</script>
+
+</body>
+</html>
