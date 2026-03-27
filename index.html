@@ -94,20 +94,20 @@
 
     /* Usage guide */
     .usage-guide {
-      background: var(--white);
+      background: var(--dark);
       border: var(--border);
       border-radius: 20px;
       box-shadow: var(--shadow-sm);
       padding: 20px 24px;
       margin-bottom: 24px;
-      color: var(--dark);
+      color: var(--white);
     }
 
     .usage-title {
       font-family: 'Unbounded', sans-serif;
       font-size: 12px;
       font-weight: 700;
-      color: var(--purple);
+      color: var(--lime);
       margin-bottom: 12px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -147,7 +147,7 @@
 
     /* Focus card */
     .focus-card {
-      background: var(--lime);
+      background: var(--white);
       border: var(--border);
       border-radius: 24px;
       box-shadow: var(--shadow-lg);
@@ -156,13 +156,17 @@
     }
 
     .focus-label {
+      display: inline-block;
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      background: var(--lime);
       color: var(--dark);
-      opacity: 0.55;
-      margin-bottom: 8px;
+      border: 2px solid var(--dark);
+      border-radius: 999px;
+      padding: 3px 12px;
+      margin-bottom: 12px;
     }
 
     .focus-title {
@@ -212,7 +216,7 @@
     .focus-steps li:last-child { margin-bottom: 0; }
 
     .focus-prompt {
-      background: rgba(26,26,26,0.07);
+      background: var(--dark);
       border-radius: 12px;
       padding: 14px 16px;
       margin-bottom: 14px;
@@ -223,13 +227,13 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: var(--purple);
+      color: var(--lime);
       margin-bottom: 7px;
     }
 
     .focus-prompt-text {
       font-size: 13px;
-      color: var(--dark);
+      color: rgba(255,255,255,0.85);
       line-height: 1.55;
       font-style: italic;
       user-select: all;
@@ -863,6 +867,19 @@
 <script>
   const TASKS = [
     {
+      id: 'lloyds-bank',
+      time: '15min',
+      title: 'Apply to Lloyds business bank account',
+      output: 'Application submitted — deadline end of March',
+      steps: [
+        'Go to lloyds.com/business/bank-accounts and start the online application',
+        'You\'ll need: your name, home address, business description, estimated annual turnover, and sole trader or Ltd status',
+        'Application takes ~10 minutes online — have your phone nearby for verification',
+        'Allow 3–5 working days for the account to open'
+      ],
+      prompt: '"Help me prepare for a Lloyds business bank account application. I\'m a sole trader / pre-seed founder in the UK. List the information and documents I\'ll likely need before starting the form — keep it concise so I can gather everything first."'
+    },
+    {
       id: 'elevator-pitch',
       time: '15min',
       title: 'Write a one-sentence product pitch',
@@ -1087,9 +1104,10 @@
     const filtered = currentFilter === 'all' ? TASKS : TASKS.filter(t => t.time === currentFilter);
 
     const groups = [
-      { key: '30min', label: '⏱ 30 minutes', tasks: filtered.filter(t => t.time === '30min') },
-      { key: '1hr',   label: '⏳ 1 hour',     tasks: filtered.filter(t => t.time === '1hr') },
-      { key: 'dipping', label: '🔁 Dipping in', tasks: filtered.filter(t => t.time === 'dipping') }
+      { key: '15min',   label: '⚡ 15 minutes',  tasks: filtered.filter(t => t.time === '15min') },
+      { key: '30min',   label: '⏱ 30 minutes',  tasks: filtered.filter(t => t.time === '30min') },
+      { key: '1hr',     label: '⏳ 1 hour',      tasks: filtered.filter(t => t.time === '1hr') },
+      { key: 'dipping', label: '🔁 Dipping in',  tasks: filtered.filter(t => t.time === 'dipping') }
     ].filter(g => g.tasks.length > 0);
 
     const container = document.getElementById('task-list');
