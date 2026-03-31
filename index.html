@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tüth — Command Centre</title>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple: #B493C4;
+      --purple-light: #C9A8D8;
+      --purple-dark: #8B6FA0;
+      --lime: #E0FF78;
+      --lime-dark: #c4e050;
+      --dark: #1a1a1a;
+      --white: #FFFFFF;
+      --red: #ED3227;
+      --orange: #FF8000;
+      --yellow: #FFCE09;
+      --green: #0CBF54;
+      --blue: #00B2E5;
+      --wordmark-orange: #FF9900;
+      --border: 3px solid #1a1a1a;
+      --shadow-lg: 6px 6px 0px #1a1a1a;
+      --shadow-sm: 4px 4px 0px #1a1a1a;
+      --radius-card: 24px;
+      --radius-btn: 16px;
+      --radius-pill: 999px;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--purple);
+      color: var(--dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background blobs */
+    .blobs { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.45; animation: drift 18s ease-in-out infinite alternate; }
+    .blob-1 { width: 420px; height: 420px; background: #C9A8D8; top: -120px; left: -120px; }
+    .blob-2 { width: 300px; height: 300px; background: #E0FF78; top: 30%; right: -80px; opacity: 0.2; animation-delay: -6s; }
+    .blob-3 { width: 360px; height: 360px; background: #A07BB5; bottom: -80px; left: 35%; animation-delay: -12s; }
+    @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(25px,18px) scale(1.04); } }
+
+    /* Layout */
+    .app { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 24px 16px 80px; }
+
+    /* Header */
+    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .header-left { display: flex; align-items: baseline; gap: 12px; }
+    .wordmark { font-family: 'Unbounded', sans-serif; font-weight: 900; font-size: 32px; color: var(--wordmark-orange); text-shadow: 2px 2px 0 var(--dark); }
+    .wordmark-sub { font-size: 13px; font-weight: 600; opacity: 0.7; letter-spacing: 0.5px; }
+    .header-right { display: flex; gap: 8px; }
+
+    /* Buttons */
+    .btn { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; padding: 8px 16px; border: var(--border); border-radius: var(--radius-btn); cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; box-shadow: var(--shadow-sm); }
+    .btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--dark); }
+    .btn-lime { background: var(--lime); color: var(--dark); }
+    .btn-white { background: var(--white); color: var(--dark); }
+    .btn-dark { background: var(--dark); color: var(--white); }
+    .btn-sm { padding: 5px 12px; font-size: 12px; box-shadow: 3px 3px 0 var(--dark); }
+    .btn-sm:active { box-shadow: 1px 1px 0 var(--dark); }
+    .btn-icon { display: inline-flex; align-items: center; gap: 6px; }
+
+    /* Cards */
+    .card { background: var(--white); border: var(--border); border-radius: var(--radius-card); box-shadow: var(--shadow-lg); padding: 20px; margin-bottom: 16px; }
+
+    /* Navigation tabs */
+    .nav { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+    .nav-btn { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; padding: 8px 18px; border: var(--border); border-radius: var(--radius-pill); cursor: pointer; transition: all 0.15s; background: var(--white); color: var(--dark); }
+    .nav-btn.active { background: var(--dark); color: var(--white); box-shadow: var(--shadow-sm); }
+    .nav-btn:hover:not(.active) { background: #f0f0f0; }
+
+    /* Progress bar */
+    .progress-wrap { margin: 12px 0 4px; }
+    .progress-bar { height: 14px; background: #e8e8e8; border: 2px solid var(--dark); border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 999px; transition: width 0.4s ease; }
+    .progress-fill.green { background: var(--green); }
+    .progress-fill.lime { background: var(--lime); }
+    .progress-fill.orange { background: var(--orange); }
+    .progress-label { font-size: 12px; font-weight: 600; margin-top: 4px; opacity: 0.6; }
+
+    /* Objective cards */
+    .obj-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 4px; }
+    .obj-title { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 17px; line-height: 1.3; }
+    .obj-target { font-size: 12px; font-weight: 600; padding: 4px 12px; border: 2px solid var(--dark); border-radius: var(--radius-pill); white-space: nowrap; background: var(--lime); }
+    .obj-desc { font-size: 14px; opacity: 0.7; margin-top: 4px; line-height: 1.4; }
+    .obj-stats { display: flex; gap: 16px; margin-top: 10px; font-size: 13px; font-weight: 600; }
+    .obj-stat { display: flex; align-items: center; gap: 4px; }
+    .stat-dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--dark); }
+    .stat-dot.done { background: var(--green); }
+    .stat-dot.ready { background: var(--lime); }
+    .stat-dot.blocked { background: #ddd; }
+
+    /* Task list */
+    .task-group-title { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 15px; margin: 20px 0 10px; padding-left: 4px; }
+    .task { border: var(--border); border-radius: 16px; margin-bottom: 8px; overflow: hidden; transition: box-shadow 0.15s; }
+    .task:hover { box-shadow: var(--shadow-sm); }
+    .task-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; background: var(--white); user-select: none; }
+    .task-check { width: 22px; height: 22px; border: 2.5px solid var(--dark); border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; font-size: 13px; font-weight: 900; }
+    .task-check.done { background: var(--green); color: var(--white); }
+    .task-check.in-progress { background: var(--yellow); }
+    .task-check:hover { transform: scale(1.1); }
+    .task-name { flex: 1; font-weight: 600; font-size: 14px; line-height: 1.3; }
+    .task-name.done-text { text-decoration: line-through; opacity: 0.5; }
+    .task-pills { display: flex; gap: 5px; flex-wrap: wrap; }
+    .pill { font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: var(--radius-pill); border: 2px solid var(--dark); white-space: nowrap; }
+    .pill-time { background: var(--blue); color: var(--white); }
+    .pill-ready { background: var(--lime); }
+    .pill-blocked { background: #e8e8e8; color: #888; }
+    .pill-done { background: var(--green); color: var(--white); }
+    .pill-in-progress { background: var(--yellow); }
+    .task-expand { font-size: 18px; transition: transform 0.2s; color: var(--dark); opacity: 0.4; flex-shrink: 0; }
+    .task-expand.open { transform: rotate(180deg); }
+
+    /* Task detail panel */
+    .task-detail { display: none; padding: 0 14px 14px; background: #fafafa; border-top: 2px solid #eee; }
+    .task-detail.open { display: block; }
+    .task-desc { font-size: 13px; line-height: 1.5; margin-bottom: 10px; opacity: 0.8; }
+    .task-meta { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; margin-bottom: 10px; }
+    .task-meta-item { display: flex; align-items: center; gap: 4px; font-weight: 500; }
+    .task-meta-label { font-weight: 700; }
+    .task-output { font-size: 12px; font-weight: 600; background: var(--dark); color: var(--lime); padding: 3px 10px; border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+    .task-deps { font-size: 12px; margin-bottom: 10px; }
+    .task-deps .dep { display: inline-block; padding: 2px 8px; margin: 2px 4px 2px 0; background: #f0f0f0; border: 1.5px solid #ccc; border-radius: 8px; font-weight: 500; }
+    .task-deps .dep.met { border-color: var(--green); background: #e6f9ed; }
+    .task-deps .dep.unmet { border-color: var(--red); background: #fde8e7; }
+
+    /* Prompt box */
+    .prompt-box { background: var(--dark); border-radius: 12px; padding: 14px; margin-top: 10px; position: relative; }
+    .prompt-label { font-size: 11px; font-weight: 700; color: var(--lime); margin-bottom: 6px; letter-spacing: 0.5px; text-transform: uppercase; }
+    .prompt-text { font-size: 13px; color: #ccc; line-height: 1.5; white-space: pre-wrap; font-family: 'Space Grotesk', monospace; }
+    .prompt-copy { position: absolute; top: 10px; right: 10px; background: var(--lime); color: var(--dark); border: 2px solid var(--dark); border-radius: 8px; padding: 4px 10px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: 'Space Grotesk', sans-serif; }
+    .prompt-copy:hover { background: var(--lime-dark); }
+
+    /* Unlocked banner */
+    .unlocked-banner { background: var(--lime); border: var(--border); border-radius: 14px; padding: 10px 16px; margin-bottom: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-sm); animation: fadeSlide 0.3s ease; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Import panel */
+    .import-panel { display: none; }
+    .import-panel.open { display: block; }
+    .import-textarea { width: 100%; min-height: 160px; font-family: 'Space Grotesk', monospace; font-size: 13px; padding: 12px; border: var(--border); border-radius: 14px; resize: vertical; margin: 10px 0; }
+    .import-info { font-size: 13px; line-height: 1.5; opacity: 0.7; margin-bottom: 8px; }
+
+    /* Overview stats row */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+    .stat-card { background: var(--white); border: var(--border); border-radius: 16px; padding: 14px; text-align: center; box-shadow: var(--shadow-sm); }
+    .stat-num { font-family: 'Unbounded', sans-serif; font-weight: 900; font-size: 28px; line-height: 1; }
+    .stat-label { font-size: 12px; font-weight: 600; opacity: 0.6; margin-top: 4px; }
+
+    /* Timeline */
+    .timeline-week { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px; }
+    .timeline-label { min-width: 80px; font-size: 12px; font-weight: 700; padding-top: 10px; text-align: right; }
+    .timeline-label.current { color: var(--orange); }
+    .timeline-bar { flex: 1; border: var(--border); border-radius: 14px; padding: 10px 14px; background: var(--white); }
+    .timeline-bar.current { background: var(--lime); box-shadow: var(--shadow-sm); }
+    .timeline-bar.done { background: #e6f9ed; }
+    .timeline-bar.future { opacity: 0.6; }
+    .timeline-obj { font-weight: 700; font-size: 13px; }
+    .timeline-tasks { font-size: 12px; opacity: 0.7; margin-top: 3px; }
+
+    /* Filter row */
+    .filter-row { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 40px; opacity: 0.5; font-size: 14px; }
+
+    /* Tooltip */
+    .tooltip { position: relative; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .app { padding: 16px 10px 60px; }
+      .wordmark { font-size: 26px; }
+      .obj-header { flex-direction: column; }
+      .task-pills { display: none; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* Animations */
+    .fade-in { animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+</head>
+<body>
+  <div class="blobs"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div></div>
+
+  <div class="app" id="app"></div>
+
+  <script>
+  // ===== DATA MODEL =====
+  const VERSION = "1.0.0";
+
+  const defaultData = {
+    version: VERSION,
+    lastUpdated: "2026-03-27",
+    objectives: [
+      {
+        id: "obj-prp",
+        name: "Prototype Readiness Pack",
+        target: "6 April 2026",
+        description: "8 documents that let you commission the right prototype first time.",
+        weekLabel: "30 Mar",
+        tasks: [
+          {
+            id: "task-prd",
+            name: "Draft PRD one-pager",
+            description: "One-page product requirements document synthesised from mechanical spec v0.1 + V1 SKU statement. The mech spec already covers pump mechanism, dimensions, materials, and cartridge interface — so this is mostly assembly + adding the 'not doing' boundaries.",
+            time: "60 min",
+            status: "done",
+            dependsOn: [],
+            output: "PRD_one_pager.md",
+            prompt: "I need to draft a PRD one-pager for tüth v1. The V1 SKU is locked: a mechanical toothpaste dispenser (airless push-down pump) + compostable refill cartridge, sold as a starter kit. The mechanical spec v0.1 already exists (see tuth-mechanical-spec-v01.docx). Please draft a 1-page PRD covering: product definition, user story, key specs (from mech spec), explicit 'not in v1' list, success criteria, and open questions for prototyping. Keep it tight — this goes to suppliers."
+          },
+          {
+            id: "task-claims",
+            name: "Write claims guardrails",
+            description: "What tüth will and will not claim — sustainability, efficacy, child safety. Needed before any supplier or marketing conversation.",
+            time: "30 min",
+            status: "todo",
+            dependsOn: [],
+            output: "claims_guardrails.md",
+            prompt: "Draft claims guardrails for tüth v1. Context: children's toothpaste dispenser + compostable refill, UK market, ages 3-8. Cover: sustainability claims (what we can/can't say under CMA Green Claims Code), efficacy claims (ASA toothpaste guidance), safety claims, and child-specific claims. For each category: list approved claim patterns and explicitly banned patterns. Reference UK regulatory frameworks. Keep it to one page."
+          },
+          {
+            id: "task-classify",
+            name: "Product classification decision",
+            description: "Is v1 a cosmetic product (toothpaste = yes), a consumer product (dispenser = yes), or both? This determines the entire compliance path. Binary decision with clear consequences.",
+            time: "30 min",
+            status: "todo",
+            dependsOn: [],
+            output: "Decision logged in TUTH_MASTER.md",
+            prompt: "Help me decide the product classification for tüth v1. The product is a children's toothpaste dispenser (hardware) sold with compostable toothpaste refill cartridges. UK market. I need to understand: (1) Is the dispenser classified separately from the toothpaste? (2) Does the toothpaste fall under UK Cosmetics Regulation? (3) What are the compliance obligations for each classification? (4) What's the simplest compliant path for a pre-seed startup? Give me a clear recommendation with rationale."
+          },
+          {
+            id: "task-compliance",
+            name: "Draft compliance path memo",
+            description: "1-page memo mapping all regulatory obligations based on product classification. GPSR, UK Cosmetics Regulation, CMA Green Claims, ASA, EN 71, ISO 20126.",
+            time: "60 min",
+            status: "todo",
+            dependsOn: ["task-classify"],
+            output: "compliance_path.md",
+            prompt: "Draft a 1-page compliance path memo for tüth v1. Product classification: [INSERT CLASSIFICATION FROM PREVIOUS TASK]. Map all applicable UK regulatory frameworks: General Product Safety Regulations 2005, UK Cosmetics Regulation (if applicable — Responsible Person, PIF, OPSS notification, labelling), CMA Green Claims Code, ASA toothpaste guidance, EN 71 toy safety (if play element triggers it), ISO 20126 (if toothbrush in scope). For each: state obligation, what we need to do, estimated cost/time, and whether it blocks prototype or only blocks launch."
+          },
+          {
+            id: "task-materials",
+            name: "Materials preferences document",
+            description: "Document preferred and excluded materials for dispenser + refill. Feeds directly into supplier briefs.",
+            time: "30 min",
+            status: "todo",
+            dependsOn: ["task-prd"],
+            output: "materials_preferences.md",
+            prompt: "Create a materials preferences document for tüth v1. The dispenser is a mechanical toothpaste dispenser (airless push-down pump, 150-200mm height, ABS/PP body). The refill is a compostable toothpaste cartridge. For each component, list: preferred materials with rationale, excluded materials with rationale, sustainability requirements, and open questions for suppliers. Reference the mechanical spec v0.1 where relevant. This document goes directly to prototype suppliers."
+          },
+          {
+            id: "task-dimensions",
+            name: "Finalise dimensions and ergonomics",
+            description: "Pull dimensions from mechanical spec v0.1, add ergonomic requirements for ages 3-8 (hand size, grip force, reach). Partially done — spec has the numbers, needs the child-ergonomics layer.",
+            time: "30 min",
+            status: "todo",
+            dependsOn: ["task-prd"],
+            output: "dimensions_ergonomics.md",
+            prompt: "Create a dimensions and ergonomics reference for tüth v1, targeted at ages 3-8. Pull base dimensions from the mechanical spec v0.1 (airless pump dispenser, 150-200mm height). Add: child hand anthropometrics (grip span, pinch force for ages 3-8), ergonomic requirements (one-hand operation, activation force <15N), countertop stability requirements, and visual/tactile design constraints. This feeds into the CAD/ID brief."
+          },
+          {
+            id: "task-renders",
+            name: "Export and name reference renders",
+            description: "Existing renders need consistent naming and export. Quick file management task.",
+            time: "15 min",
+            status: "todo",
+            dependsOn: [],
+            output: "renders/ folder with named files",
+            prompt: "I need to organise my existing product renders and reference images for tüth v1 into a clean reference folder. Help me create a naming convention and folder structure for: concept renders, ergonomic reference images, competitor product photos, material samples, and inspiration images. The folder should be ready to share with industrial designers."
+          },
+          {
+            id: "task-packaging",
+            name: "Draft packaging brief",
+            description: "Packaging requirements for starter kit. Depends on PRD (what's in the box) and compliance (labelling requirements).",
+            time: "45 min",
+            status: "todo",
+            dependsOn: ["task-prd", "task-compliance"],
+            output: "packaging_brief.md",
+            prompt: "Draft a packaging brief for the tüth v1 starter kit. Contents: 1x mechanical dispenser + 1x compostable toothpaste refill (possibly + 1x toothbrush). Requirements: sustainable materials (no single-use plastic), child-safe, retail-shelf-ready, must communicate brand pillars (joy, independence, sustainability). Include: box dimensions estimate, material preferences, labelling requirements (from compliance path), unboxing experience notes, and sustainability claims that can appear on-pack. Reference CMA Green Claims Code for any environmental claims on packaging."
+          },
+          {
+            id: "task-testplan",
+            name: "Draft test plan v0",
+            description: "What needs testing before launch. Based on PRD requirements and compliance obligations.",
+            time: "45 min",
+            status: "todo",
+            dependsOn: ["task-prd", "task-compliance"],
+            output: "test_plan_v0.md",
+            prompt: "Draft a v0 test plan for tüth v1. The product is a children's toothpaste dispenser + compostable refill. Based on the PRD and compliance path, outline: (1) functional tests (pump mechanism, cartridge interface, dose control), (2) safety tests (drop test, choking hazard, material toxicity), (3) regulatory tests (EN 71 if applicable, cosmetics stability testing), (4) user tests (child usability with ages 3-8), (5) durability tests (cycle count, cleaning resilience). For each: state the test, pass criteria, whether it's needed for prototype vs launch, and estimated cost range."
+          }
+        ]
+      },
+      {
+        id: "obj-suppliers",
+        name: "Supplier Pipeline",
+        target: "13 April 2026",
+        description: "5 suppliers contacted, 2 qualified. Across CAD/ID, prototyping, packaging, and formulation.",
+        weekLabel: "6 Apr",
+        tasks: [
+          {
+            id: "task-research-suppliers",
+            name: "Research 15 candidate suppliers",
+            description: "5 CAD/industrial design studios, 5 prototype shops/OEM, 5 packaging suppliers. UK-based or UK-serving preferred.",
+            time: "60 min",
+            status: "todo",
+            dependsOn: ["task-prd"],
+            output: "Supplier tracker spreadsheet",
+            prompt: "Help me research and shortlist 15 candidate suppliers for tüth v1 prototype development. I need: 5 CAD/industrial design studios (UK-based, experience with consumer products or toys, ideally children's products), 5 prototype shops or OEM manufacturers (can produce appearance + functional prototypes, small MOQ), 5 packaging suppliers (sustainable materials, small run capability). For each: company name, location, speciality, minimum order/project size if known, website, and why they're relevant to tüth. Present as a tracker I can maintain."
+          },
+          {
+            id: "task-research-formulation",
+            name: "Research 3 formulation partners",
+            description: "Toothpaste formulation houses that can develop child-safe, preservative-free paste compatible with airless pump delivery.",
+            time: "30 min",
+            status: "todo",
+            dependsOn: ["task-classify"],
+            output: "Added to supplier tracker",
+            prompt: "Help me find 3 candidate formulation partners for tüth v1 toothpaste refills. Requirements: UK-based or EU cosmetics formulation house, experience with oral care / toothpaste, can develop child-safe formulation (ages 3-8, low fluoride or fluoride-free option), compatible with airless pump delivery (viscosity matters), can handle Responsible Person obligations or work with one. For each: company name, location, speciality, relevant experience, and contact route."
+          },
+          {
+            id: "task-outreach-template",
+            name: "Draft supplier outreach email",
+            description: "Template email that positions tüth credibly to potential suppliers. Professional, specific, not startup-fluffy.",
+            time: "20 min",
+            status: "todo",
+            dependsOn: ["task-research-suppliers"],
+            output: "Email template ready to send",
+            prompt: "Draft a supplier outreach email template for tüth. I'm contacting CAD/ID studios, prototype shops, and packaging suppliers about developing a children's toothpaste dispenser. The email should: introduce tüth and the product briefly, state what I need from them specifically, mention that I have a PRD and mechanical spec ready to share, ask about their process/MOQ/timeline, and sound like a credible founder — not a cold pitch. British English. Keep it under 200 words. Provide one version for design studios and one for manufacturing/packaging."
+          },
+          {
+            id: "task-send-outreach",
+            name: "Send 5 supplier outreach emails",
+            description: "Personalise the template, send to top 5 candidates, update tracker with sent dates.",
+            time: "45 min",
+            status: "todo",
+            dependsOn: ["task-outreach-template"],
+            output: "5 emails sent, tracker updated",
+            prompt: "I've drafted the supplier outreach template and have my shortlist. Help me personalise the email for these 5 specific suppliers: [LIST SUPPLIERS]. For each, I need: a personalised opening line referencing something specific about their work, any adjustments to the brief based on their speciality, and a specific ask. Keep each email under 200 words."
+          },
+          {
+            id: "task-book-calls",
+            name: "Book 2 supplier intro calls",
+            description: "Follow up on outreach responses, book initial conversations with 2 most promising suppliers.",
+            time: "20 min",
+            status: "todo",
+            dependsOn: ["task-send-outreach"],
+            output: "2 calls booked",
+            prompt: "I've had responses from suppliers. Help me: (1) evaluate which 2-3 are most promising based on their responses, (2) draft follow-up emails to book 30-min intro calls, (3) prepare a brief agenda/question list for the calls covering: their process, timeline, pricing structure, MOQ, and experience with similar products."
+          }
+        ]
+      },
+      {
+        id: "obj-compliance",
+        name: "Compliance & Claims",
+        target: "30 March 2026",
+        description: "Classification decided, compliance path mapped, claims guardrails set.",
+        weekLabel: "30 Mar",
+        tasks: [
+          // These reference tasks from PRP — shown as cross-refs
+        ]
+      },
+      {
+        id: "obj-cad",
+        name: "CAD/ID & Prototyping",
+        target: "27 April 2026",
+        description: "CAD brief sent, DFM checkpoint done, first appearance prototype ordered and in hand.",
+        weekLabel: "13 Apr",
+        tasks: [
+          {
+            id: "task-cad-brief",
+            name: "Write CAD/ID brief",
+            description: "Design brief for industrial design partner. Synthesises PRD, dimensions, materials, and brand identity into a single actionable brief.",
+            time: "60 min",
+            status: "todo",
+            dependsOn: ["task-prd", "task-dimensions", "task-materials"],
+            output: "cad_id_brief.md",
+            prompt: "Draft a CAD/industrial design brief for tüth v1. This goes to an external design studio. Include: product overview (mechanical toothpaste dispenser for ages 3-8), design intent (character-led, collectible, neobrutalist aesthetic), key specs from PRD and mechanical spec, dimensions and ergonomic requirements, materials preferences, brand identity reference (colours, design language), deliverables expected (3D CAD, renders, DFM notes), and constraints (child safety, one-hand operation, countertop stability). Keep it to 2 pages. Professional and precise."
+          },
+          {
+            id: "task-dfm",
+            name: "DFM checkpoint with supplier",
+            description: "Review design-for-manufacture considerations with shortlisted prototype supplier. Identify any design changes needed before tooling.",
+            time: "30 min",
+            status: "todo",
+            dependsOn: ["task-cad-brief", "task-book-calls"],
+            output: "DFM question list + notes",
+            prompt: "Prepare a DFM (Design for Manufacture) checkpoint agenda for my first supplier call about the tüth v1 dispenser. Key areas to cover: material selection validation, wall thickness and draft angles for injection moulding, snap-fit vs threaded assembly for cartridge interface, surface finish options, tooling cost estimates, prototype vs production method differences, and minimum order quantities. List the specific questions I should ask."
+          },
+          {
+            id: "task-order-proto",
+            name: "Order appearance prototype",
+            description: "Commission first appearance/ergonomic prototype based on CAD brief + DFM feedback.",
+            time: "30 min",
+            status: "todo",
+            dependsOn: ["task-dfm"],
+            output: "Prototype PO / confirmation",
+            prompt: "Help me draft a prototype commission brief/purchase order for tüth v1. This is an appearance and ergonomic prototype (not functional). Include: deliverables (physical model at 1:1 scale), material (SLA resin or similar rapid prototype material), finish requirements, quantity (2-3 units), timeline expectation, and payment terms. Based on DFM checkpoint feedback: [INSERT DFM NOTES]."
+          },
+          {
+            id: "task-proto-review",
+            name: "Review first prototype",
+            description: "Hands-on review of first prototype. Document feedback, create iteration list.",
+            time: "60 min",
+            status: "todo",
+            dependsOn: ["task-order-proto"],
+            output: "Prototype feedback notes + iteration list",
+            prompt: "I've received the first tüth v1 prototype. Help me create a structured review framework covering: (1) dimensional accuracy vs spec, (2) ergonomic assessment (hand feel, grip, activation force), (3) visual/aesthetic assessment (brand alignment, character potential), (4) functional assessment (cartridge insertion, pump action if applicable), (5) child usability prediction (ages 3-8), (6) manufacturing concerns spotted. For each area: what to check, how to assess, and how to document findings. Include a simple scoring template."
+          }
+        ]
+      },
+      {
+        id: "obj-ip",
+        name: "IP & Legal",
+        target: "Ongoing",
+        description: "Trade mark filed, IP position established.",
+        weekLabel: "23 Mar",
+        tasks: [
+          {
+            id: "task-tm-decision",
+            name: "Trade mark filing decision",
+            description: "UK IPO fees increased 1 April. Decision was deferred — fees now £205/class. File when ready. Nice classes: Class 3 (toothpaste/oral care) + Class 21 (toothbrushes/dispensers).",
+            time: "15 min",
+            status: "done",
+            dependsOn: [],
+            output: "Decision logged — deferred (D5)",
+            prompt: ""
+          },
+          {
+            id: "task-tm-file",
+            name: "File trade mark application",
+            description: "Submit UK IPO application for 'tüth' in Class 3 + Class 21. £205 per class = £410 total.",
+            time: "30 min",
+            status: "todo",
+            dependsOn: ["task-tm-decision"],
+            output: "Trade mark application submitted",
+            prompt: "Walk me through filing a UK trade mark application for 'tüth' with the UK IPO. I need: (1) which Nice classes to file under (I think Class 3 for oral care products and Class 21 for dispensers/toothbrushes), (2) the exact goods/services description to use, (3) whether the umlaut (ü) creates any filing considerations, (4) the step-by-step online filing process, (5) total cost breakdown, (6) what happens after filing (examination timeline, publication, opposition period). Keep it practical — I want to do this in one sitting."
+          }
+        ]
+      },
+      {
+        id: "obj-launch-prep",
+        name: "Launch Readiness",
+        target: "8 June 2026",
+        description: "Packaging finalised, claims register complete, launch checklist v1 written.",
+        weekLabel: "1 Jun",
+        tasks: [
+          {
+            id: "task-packaging-mock",
+            name: "Commission packaging mock-up",
+            description: "Brief a packaging supplier for starter kit mock-up + dieline.",
+            time: "45 min",
+            status: "todo",
+            dependsOn: ["task-packaging", "task-proto-review"],
+            output: "Packaging mock-up brief + dieline request",
+            prompt: "Draft a packaging mock-up commission brief for the tüth v1 starter kit. Based on the packaging brief and prototype review feedback, specify: box dimensions, material, structural design (tuck-end, sleeve, etc.), print requirements (brand identity, regulatory labelling), unboxing sequence, insert/fitment needs, and sustainability requirements. Include a request for dieline artwork."
+          },
+          {
+            id: "task-claims-register",
+            name: "Build claims register v1",
+            description: "Formal register of every claim tüth makes — with evidence status for each.",
+            time: "60 min",
+            status: "todo",
+            dependsOn: ["task-claims", "task-compliance"],
+            output: "claims_register_v1.md",
+            prompt: "Create a claims register for tüth v1. This is a formal document listing every claim the brand will make (on packaging, website, marketing, pitch materials) with: the exact claim text, the category (sustainability, safety, efficacy, convenience), the evidence required, the evidence we currently have, the regulatory framework it falls under (CMA, ASA, UK Cosmetics Reg), and the status (substantiated / partially substantiated / unsubstantiated). Pre-populate with likely claims based on the brand positioning and claims guardrails."
+          },
+          {
+            id: "task-launch-checklist",
+            name: "Write launch checklist v1",
+            description: "Everything needed before v1 can ship. Regulatory, supply chain, marketing, operations.",
+            time: "60 min",
+            status: "todo",
+            dependsOn: ["task-compliance", "task-claims-register", "task-packaging-mock"],
+            output: "launch_checklist_v1.md",
+            prompt: "Create a v1 launch checklist for tüth. Organise by category: (1) Regulatory (Responsible Person, PIF, OPSS notification, labelling compliance), (2) Product (prototype signed off, tooling ordered, first production run), (3) Supply chain (formulation partner, packaging supplier, fulfilment), (4) Marketing (landing page, brand assets, launch content), (5) Operations (Shopify/e-commerce setup, payment, shipping), (6) Legal (trade mark, terms & conditions, privacy policy). For each item: what it is, whether it blocks launch or is nice-to-have, estimated time/cost, and current status."
+          }
+        ]
+      }
+    ],
+    // Cross-reference map: compliance objective references tasks from other objectives
+    crossRefs: {
+      "obj-compliance": ["task-classify", "task-compliance", "task-claims"]
+    },
+    // Completed tasks that were in the original master but are now done
+    completedMilestones: [
+      "Brand identity defined",
+      "Competitive landscape (10 brands)",
+      "Business plan (Dec 2025)",
+      "Market research",
+      "Investment deck (Jan 2025)",
+      "Landing page live",
+      "Mechanical spec v0.1",
+      "Financial model",
+      "Sustainability trends deck",
+      "V1 SKU statement locked",
+      "Dashboard v1 + v2"
+    ],
+    timeline: [
+      { week: "23 Mar", objective: "MVP Lock + IP Timing", outputs: "V1 SKU statement; trade mark decision", status: "done" },
+      { week: "30 Mar", objective: "Prototype Readiness Pack v1", outputs: "PRD, claims guardrails, compliance path", status: "current" },
+      { week: "6 Apr", objective: "Supplier Shortlist + Outreach", outputs: "5 suppliers contacted; tracker live", status: "future" },
+      { week: "13 Apr", objective: "CAD/ID Brief + DFM Checkpoint", outputs: "CAD brief sent; DFM question list", status: "future" },
+      { week: "20 Apr", objective: "Prototype Build 1", outputs: "Appearance/ergonomic prototype ordered", status: "future" },
+      { week: "27 Apr", objective: "First Prototype In-Hand", outputs: "Feedback notes; iteration list", status: "future" },
+      { week: "4 May", objective: "Iterate + Converge", outputs: "Prototype v2 direction", status: "future" },
+      { week: "11 May", objective: "Packaging Mock-Up Path", outputs: "Packaging brief + dieline request", status: "future" },
+      { week: "18 May", objective: "Claims + Evidence Discipline", outputs: "Claims register v1", status: "future" },
+      { week: "25 May", objective: "Supplier Narrowing", outputs: "2 supplier finalists", status: "future" },
+      { week: "1 Jun", objective: "Pilot Batch Plan", outputs: "QC + traceability plan", status: "future" },
+      { week: "8 Jun", objective: "Launch Readiness Skeleton", outputs: "Launch checklist v1", status: "future" }
+    ]
+  };
+
+  // ===== STATE MANAGEMENT =====
+  const STORAGE_KEY = "tuth_command_v1";
+
+  function loadState() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Merge saved status into default data (preserves structure updates)
+        const merged = JSON.parse(JSON.stringify(defaultData));
+        const statusMap = {};
+        parsed.objectives?.forEach(obj => {
+          obj.tasks?.forEach(t => { statusMap[t.id] = t.status; });
+        });
+        merged.objectives.forEach(obj => {
+          obj.tasks.forEach(t => {
+            if (statusMap[t.id]) t.status = statusMap[t.id];
+          });
+        });
+        return merged;
+      }
+    } catch(e) { console.warn("Failed to load state", e); }
+    return JSON.parse(JSON.stringify(defaultData));
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch(e) { console.warn("Failed to save state", e); }
+  }
+
+  let state = loadState();
+  let currentView = "overview";
+  let expandedTasks = new Set();
+  let filterObjective = "all";
+  let recentlyUnlocked = [];
+
+  // ===== DEPENDENCY LOGIC =====
+  function getAllTasks() {
+    const tasks = [];
+    state.objectives.forEach(obj => {
+      obj.tasks.forEach(t => tasks.push({ ...t, objectiveId: obj.id, objectiveName: obj.name }));
+    });
+    return tasks;
+  }
+
+  function getTask(id) {
+    for (const obj of state.objectives) {
+      for (const t of obj.tasks) {
+        if (t.id === id) return t;
+      }
+    }
+    return null;
+  }
+
+  function isTaskReady(task) {
+    if (task.status === "done") return true;
+    if (!task.dependsOn || task.dependsOn.length === 0) return true;
+    return task.dependsOn.every(depId => {
+      const dep = getTask(depId);
+      return dep && dep.status === "done";
+    });
+  }
+
+  function isTaskBlocked(task) {
+    return !isTaskReady(task) && task.status !== "done";
+  }
+
+  function getStatusLabel(task) {
+    if (task.status === "done") return "done";
+    if (task.status === "in-progress") return "in-progress";
+    if (isTaskBlocked(task)) return "blocked";
+    return "ready";
+  }
+
+  function getObjectiveProgress(obj) {
+    if (obj.tasks.length === 0) {
+      // Cross-ref objective — check referenced tasks
+      const refs = state.crossRefs[obj.id] || [];
+      if (refs.length === 0) return { done: 0, total: 0, pct: 0 };
+      const done = refs.filter(id => { const t = getTask(id); return t && t.status === "done"; }).length;
+      return { done, total: refs.length, pct: Math.round((done / refs.length) * 100) };
+    }
+    const done = obj.tasks.filter(t => t.status === "done").length;
+    return { done, total: obj.tasks.length, pct: Math.round((done / obj.tasks.length) * 100) };
+  }
+
+  function toggleTaskStatus(taskId) {
+    const task = getTask(taskId);
+    if (!task) return;
+
+    const prevStatus = task.status;
+    if (task.status === "done") {
+      task.status = "todo";
+    } else if (task.status === "in-progress") {
+      task.status = "done";
+    } else {
+      // todo -> check if ready
+      if (isTaskReady(task)) {
+        task.status = "done";
+      }
+      return; // blocked tasks can't be toggled
+    }
+
+    // Check what got unlocked
+    if (task.status === "done") {
+      recentlyUnlocked = [];
+      getAllTasks().forEach(t => {
+        if (t.id !== taskId && t.status !== "done" && t.dependsOn?.includes(taskId)) {
+          if (isTaskReady(t)) {
+            recentlyUnlocked.push(t.name);
+          }
+        }
+      });
+    }
+
+    saveState();
+    render();
+
+    // Clear unlocked banner after 5s
+    if (recentlyUnlocked.length > 0) {
+      setTimeout(() => { recentlyUnlocked = []; render(); }, 5000);
+    }
+  }
+
+  function setTaskStatus(taskId, status) {
+    const task = getTask(taskId);
+    if (task) {
+      task.status = status;
+      saveState();
+      render();
+    }
+  }
+
+  // ===== RENDERING =====
+  function render() {
+    const app = document.getElementById("app");
+    app.innerHTML = renderHeader() + renderNav() + renderContent();
+    attachEvents();
+  }
+
+  function renderHeader() {
+    return `
+      <div class="header">
+        <div class="header-left">
+          <div class="wordmark">tüth</div>
+          <div class="wordmark-sub">command centre</div>
+        </div>
+        <div class="header-right">
+          <button class="btn btn-white btn-sm btn-icon" onclick="showImport()">↓ Import</button>
+          <button class="btn btn-white btn-sm btn-icon" onclick="exportData()">↑ Export</button>
+          <button class="btn btn-dark btn-sm btn-icon" onclick="resetData()">Reset</button>
+        </div>
+      </div>`;
+  }
+
+  function renderNav() {
+    const tabs = [
+      { id: "overview", label: "Overview" },
+      { id: "tasks", label: "All Tasks" },
+      { id: "timeline", label: "12-Week Plan" },
+      { id: "import", label: "Update" }
+    ];
+    return `<div class="nav">${tabs.map(t =>
+      `<button class="nav-btn ${currentView === t.id ? 'active' : ''}" data-view="${t.id}">${t.label}</button>`
+    ).join("")}</div>`;
+  }
+
+  function renderContent() {
+    switch(currentView) {
+      case "overview": return renderOverview();
+      case "tasks": return renderTasksView();
+      case "timeline": return renderTimeline();
+      case "import": return renderImportView();
+      default: return renderOverview();
+    }
+  }
+
+  // --- Overview ---
+  function renderOverview() {
+    const allTasks = getAllTasks();
+    const done = allTasks.filter(t => t.status === "done").length;
+    const ready = allTasks.filter(t => t.status !== "done" && isTaskReady(t)).length;
+    const blocked = allTasks.filter(t => isTaskBlocked(t)).length;
+    const inProgress = allTasks.filter(t => t.status === "in-progress").length;
+    const totalPct = allTasks.length > 0 ? Math.round((done / allTasks.length) * 100) : 0;
+
+    let html = `
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-num" style="color:var(--green)">${done}</div><div class="stat-label">Done</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--orange)">${inProgress}</div><div class="stat-label">In Progress</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--dark)">${ready}</div><div class="stat-label">Ready</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#aaa">${blocked}</div><div class="stat-label">Blocked</div></div>
+      </div>
+      <div class="card" style="margin-bottom:20px">
+        <div style="font-weight:700;font-size:14px;margin-bottom:6px">Overall Progress</div>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill green" style="width:${totalPct}%"></div></div>
+          <div class="progress-label">${done} of ${allTasks.length} tasks complete (${totalPct}%)</div>
+        </div>
+      </div>`;
+
+    // Unlocked banner
+    if (recentlyUnlocked.length > 0) {
+      html += `<div class="unlocked-banner">🔓 Unlocked: ${recentlyUnlocked.join(", ")}</div>`;
+    }
+
+    // Next up — ready tasks
+    const readyTasks = allTasks.filter(t => t.status !== "done" && t.status !== "in-progress" && isTaskReady(t));
+    if (readyTasks.length > 0) {
+      html += `<div class="task-group-title" style="margin-top:8px">Next Up — Ready Now</div>`;
+      readyTasks.slice(0, 5).forEach(t => { html += renderTask(t); });
+    }
+
+    // In progress
+    const ipTasks = allTasks.filter(t => t.status === "in-progress");
+    if (ipTasks.length > 0) {
+      html += `<div class="task-group-title">In Progress</div>`;
+      ipTasks.forEach(t => { html += renderTask(t); });
+    }
+
+    // Objective cards
+    html += `<div class="task-group-title" style="margin-top:24px">Objectives</div>`;
+    state.objectives.forEach(obj => {
+      if (obj.id === "obj-compliance") return; // Cross-ref only, skip in overview
+      const p = getObjectiveProgress(obj);
+      const fillClass = p.pct === 100 ? "green" : p.pct > 0 ? "lime" : "orange";
+      html += `
+        <div class="card" style="cursor:pointer" onclick="focusObjective('${obj.id}')">
+          <div class="obj-header">
+            <div class="obj-title">${obj.name}</div>
+            <div class="obj-target">${obj.target}</div>
+          </div>
+          <div class="obj-desc">${obj.description}</div>
+          <div class="progress-wrap">
+            <div class="progress-bar"><div class="progress-fill ${fillClass}" style="width:${p.pct}%"></div></div>
+            <div class="progress-label">${p.done}/${p.total} tasks (${p.pct}%)</div>
+          </div>
+          <div class="obj-stats">
+            <div class="obj-stat"><div class="stat-dot done"></div> ${obj.tasks.filter(t=>t.status==="done").length} done</div>
+            <div class="obj-stat"><div class="stat-dot ready"></div> ${obj.tasks.filter(t=>t.status!=="done"&&isTaskReady(t)).length} ready</div>
+            <div class="obj-stat"><div class="stat-dot blocked"></div> ${obj.tasks.filter(t=>isTaskBlocked(t)).length} blocked</div>
+          </div>
+        </div>`;
+    });
+
+    // Completed milestones
+    html += `<div class="task-group-title" style="margin-top:24px">Completed Milestones</div>
+      <div class="card"><ul style="list-style:none;padding:0">${state.completedMilestones.map(m =>
+        `<li style="padding:4px 0;font-size:13px;opacity:0.6"><span style="color:var(--green);margin-right:8px">✓</span>${m}</li>`
+      ).join("")}</ul></div>`;
+
+    return html;
+  }
+
+  // --- Tasks View ---
+  function renderTasksView() {
+    let html = `<div class="filter-row">
+      <button class="nav-btn ${filterObjective==='all'?'active':''}" data-filter="all">All</button>
+      ${state.objectives.filter(o=>o.id!=="obj-compliance").map(o =>
+        `<button class="nav-btn ${filterObjective===o.id?'active':''}" data-filter="${o.id}">${o.name.split(" ")[0]}</button>`
+      ).join("")}
+    </div>`;
+
+    if (recentlyUnlocked.length > 0) {
+      html += `<div class="unlocked-banner">🔓 Unlocked: ${recentlyUnlocked.join(", ")}</div>`;
+    }
+
+    const objectives = filterObjective === "all"
+      ? state.objectives.filter(o => o.id !== "obj-compliance")
+      : state.objectives.filter(o => o.id === filterObjective);
+
+    objectives.forEach(obj => {
+      const p = getObjectiveProgress(obj);
+      html += `<div class="task-group-title">${obj.name} <span style="font-family:'Space Grotesk';font-weight:500;font-size:12px;opacity:0.5;margin-left:8px">${p.done}/${p.total}</span></div>`;
+      obj.tasks.forEach(t => { html += renderTask(t); });
+    });
+
+    return html;
+  }
+
+  // --- Single task ---
+  function renderTask(task) {
+    const status = getStatusLabel(task);
+    const isExpanded = expandedTasks.has(task.id);
+    const checkClass = status === "done" ? "done" : status === "in-progress" ? "in-progress" : "";
+    const checkContent = status === "done" ? "✓" : status === "in-progress" ? "·" : "";
+    const nameClass = status === "done" ? "done-text" : "";
+
+    let pillHtml = "";
+    if (task.time) pillHtml += `<span class="pill pill-time">${task.time}</span>`;
+    if (status === "done") pillHtml += `<span class="pill pill-done">Done</span>`;
+    else if (status === "in-progress") pillHtml += `<span class="pill pill-in-progress">In progress</span>`;
+    else if (status === "ready") pillHtml += `<span class="pill pill-ready">Ready</span>`;
+    else pillHtml += `<span class="pill pill-blocked">Blocked</span>`;
+
+    let detailHtml = "";
+    if (isExpanded) {
+      detailHtml = `<div class="task-detail open">`;
+      if (task.description) detailHtml += `<div class="task-desc">${task.description}</div>`;
+      if (task.output) detailHtml += `<div class="task-output">→ ${task.output}</div>`;
+
+      // Dependencies
+      if (task.dependsOn && task.dependsOn.length > 0) {
+        detailHtml += `<div class="task-deps"><strong style="font-size:12px">Depends on:</strong> `;
+        task.dependsOn.forEach(depId => {
+          const dep = getTask(depId);
+          const met = dep && dep.status === "done";
+          detailHtml += `<span class="dep ${met ? 'met' : 'unmet'}">${met ? '✓' : '✗'} ${dep ? dep.name : depId}</span>`;
+        });
+        detailHtml += `</div>`;
+      }
+
+      // Status buttons
+      detailHtml += `<div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">`;
+      if (status !== "done" && status !== "blocked") {
+        if (task.status !== "in-progress") {
+          detailHtml += `<button class="btn btn-lime btn-sm" data-setstatus="${task.id}:in-progress">Start</button>`;
+        }
+        detailHtml += `<button class="btn btn-lime btn-sm" data-setstatus="${task.id}:done">Mark Done</button>`;
+      }
+      if (status === "done") {
+        detailHtml += `<button class="btn btn-white btn-sm" data-setstatus="${task.id}:todo">Undo</button>`;
+      }
+      detailHtml += `</div>`;
+
+      // Prompt
+      if (task.prompt) {
+        detailHtml += `
+          <div class="prompt-box">
+            <div class="prompt-label">Claude Prompt</div>
+            <div class="prompt-text">${escapeHtml(task.prompt)}</div>
+            <button class="prompt-copy" data-copy="${task.id}">Copy</button>
+          </div>`;
+      }
+      detailHtml += `</div>`;
+    }
+
+    return `
+      <div class="task" data-task-id="${task.id}">
+        <div class="task-header" data-toggle="${task.id}">
+          <div class="task-check ${checkClass}" data-check="${task.id}">${checkContent}</div>
+          <div class="task-name ${nameClass}">${task.name}</div>
+          <div class="task-pills">${pillHtml}</div>
+          <div class="task-expand ${isExpanded ? 'open' : ''}">▾</div>
+        </div>
+        ${detailHtml}
+      </div>`;
+  }
+
+  // --- Timeline ---
+  function renderTimeline() {
+    let html = `<div class="card" style="margin-bottom:16px">
+      <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:17px;margin-bottom:4px">12-Week Plan</div>
+      <div style="font-size:13px;opacity:0.6">23 March – 14 June 2026</div>
+    </div>`;
+
+    state.timeline.forEach(w => {
+      const cls = w.status === "current" ? "current" : w.status === "done" ? "done" : "future";
+      const labelCls = w.status === "current" ? "current" : "";
+      html += `
+        <div class="timeline-week">
+          <div class="timeline-label ${labelCls}">${w.week}</div>
+          <div class="timeline-bar ${cls}">
+            <div class="timeline-obj">${w.status === "done" ? "✓ " : ""}${w.objective}</div>
+            <div class="timeline-tasks">${w.outputs}</div>
+          </div>
+        </div>`;
+    });
+    return html;
+  }
+
+  // --- Import/Update ---
+  function renderImportView() {
+    return `
+      <div class="card">
+        <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:17px;margin-bottom:8px">Update Tasks</div>
+        <div class="import-info">
+          Paste a task update from Claude below. The format is simple JSON — Claude can generate this for you.<br><br>
+          Ask Claude: <em>"Generate a tüth command centre update with any new tasks, status changes, or additions."</em>
+        </div>
+        <textarea class="import-textarea" id="importText" placeholder='Paste JSON update here. Example:
+{
+  "updates": [
+    { "id": "task-prd", "status": "done" },
+    { "id": "task-new-thing", "name": "New task name", "description": "What it is", "time": "30 min", "dependsOn": ["task-prd"], "prompt": "Claude prompt here", "output": "output_file.md", "objectiveId": "obj-prp" }
+  ]
+}'></textarea>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-lime" onclick="applyImport()">Apply Update</button>
+          <button class="btn btn-white" onclick="clearImport()">Clear</button>
+        </div>
+        <div id="importResult" style="margin-top:10px;font-size:13px"></div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:17px;margin-bottom:8px">Export Current State</div>
+        <div class="import-info">Copy this JSON to share your current state with Claude, or to back up your progress.</div>
+        <button class="btn btn-white" onclick="exportToTextarea()">Show Export Data</button>
+        <textarea class="import-textarea" id="exportText" style="display:none" readonly></textarea>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:17px;margin-bottom:8px">Reset</div>
+        <div class="import-info">Reset all task statuses back to the default state. This cannot be undone.</div>
+        <button class="btn btn-dark" onclick="resetData()">Reset All Progress</button>
+      </div>`;
+  }
+
+  // ===== EVENT HANDLING =====
+  function attachEvents() {
+    // Nav
+    document.querySelectorAll(".nav-btn[data-view]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentView = btn.dataset.view;
+        render();
+      });
+    });
+
+    // Filters
+    document.querySelectorAll(".nav-btn[data-filter]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterObjective = btn.dataset.filter;
+        render();
+      });
+    });
+
+    // Task toggle expand
+    document.querySelectorAll("[data-toggle]").forEach(el => {
+      el.addEventListener("click", (e) => {
+        if (e.target.closest("[data-check]")) return;
+        const id = el.dataset.toggle;
+        if (expandedTasks.has(id)) expandedTasks.delete(id);
+        else expandedTasks.add(id);
+        render();
+      });
+    });
+
+    // Task checkbox
+    document.querySelectorAll("[data-check]").forEach(el => {
+      el.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleTaskStatus(el.dataset.check);
+      });
+    });
+
+    // Status buttons
+    document.querySelectorAll("[data-setstatus]").forEach(el => {
+      el.addEventListener("click", () => {
+        const [id, status] = el.dataset.setstatus.split(":");
+        setTaskStatus(id, status);
+      });
+    });
+
+    // Copy prompt
+    document.querySelectorAll("[data-copy]").forEach(el => {
+      el.addEventListener("click", () => {
+        const taskId = el.dataset.copy;
+        const task = getTask(taskId);
+        if (task && task.prompt) {
+          navigator.clipboard.writeText(task.prompt).then(() => {
+            el.textContent = "Copied!";
+            setTimeout(() => { el.textContent = "Copy"; }, 1500);
+          });
+        }
+      });
+    });
+  }
+
+  // ===== IMPORT/EXPORT =====
+  window.applyImport = function() {
+    const textarea = document.getElementById("importText");
+    const result = document.getElementById("importResult");
+    try {
+      const data = JSON.parse(textarea.value);
+      let applied = 0;
+      let added = 0;
+
+      if (data.updates && Array.isArray(data.updates)) {
+        data.updates.forEach(update => {
+          const existing = getTask(update.id);
+          if (existing) {
+            // Update existing task
+            if (update.status) existing.status = update.status;
+            if (update.name) existing.name = update.name;
+            if (update.description) existing.description = update.description;
+            if (update.time) existing.time = update.time;
+            if (update.prompt) existing.prompt = update.prompt;
+            if (update.output) existing.output = update.output;
+            if (update.dependsOn) existing.dependsOn = update.dependsOn;
+            applied++;
+          } else if (update.objectiveId && update.name) {
+            // Add new task
+            const obj = state.objectives.find(o => o.id === update.objectiveId);
+            if (obj) {
+              obj.tasks.push({
+                id: update.id,
+                name: update.name,
+                description: update.description || "",
+                time: update.time || "",
+                status: update.status || "todo",
+                dependsOn: update.dependsOn || [],
+                output: update.output || "",
+                prompt: update.prompt || ""
+              });
+              added++;
+            }
+          }
+        });
+      }
+
+      // Support adding new objectives
+      if (data.newObjectives && Array.isArray(data.newObjectives)) {
+        data.newObjectives.forEach(obj => {
+          if (!state.objectives.find(o => o.id === obj.id)) {
+            state.objectives.push(obj);
+            added += obj.tasks?.length || 0;
+          }
+        });
+      }
+
+      // Support timeline updates
+      if (data.timeline && Array.isArray(data.timeline)) {
+        state.timeline = data.timeline;
+      }
+
+      saveState();
+      result.innerHTML = `<span style="color:var(--green);font-weight:700">✓ Applied: ${applied} updated, ${added} added</span>`;
+      render();
+    } catch(e) {
+      result.innerHTML = `<span style="color:var(--red);font-weight:700">✗ Error: ${e.message}</span>`;
+    }
+  };
+
+  window.exportToTextarea = function() {
+    const textarea = document.getElementById("exportText");
+    const exportData = {
+      exportedAt: new Date().toISOString(),
+      updates: []
+    };
+    getAllTasks().forEach(t => {
+      exportData.updates.push({
+        id: t.id,
+        name: t.name,
+        status: t.status,
+        objectiveId: t.objectiveId
+      });
+    });
+    textarea.value = JSON.stringify(exportData, null, 2);
+    textarea.style.display = "block";
+  };
+
+  window.exportData = function() {
+    const exportData = { updates: [] };
+    getAllTasks().forEach(t => {
+      exportData.updates.push({ id: t.id, name: t.name, status: t.status, objectiveId: t.objectiveId });
+    });
+    navigator.clipboard.writeText(JSON.stringify(exportData, null, 2)).then(() => {
+      alert("State copied to clipboard");
+    });
+  };
+
+  window.showImport = function() {
+    currentView = "import";
+    render();
+  };
+
+  window.clearImport = function() {
+    document.getElementById("importText").value = "";
+    document.getElementById("importResult").innerHTML = "";
+  };
+
+  window.resetData = function() {
+    if (confirm("Reset all progress? This cannot be undone.")) {
+      localStorage.removeItem(STORAGE_KEY);
+      state = JSON.parse(JSON.stringify(defaultData));
+      render();
+    }
+  };
+
+  window.focusObjective = function(objId) {
+    currentView = "tasks";
+    filterObjective = objId;
+    render();
+  };
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  // ===== INIT =====
+  render();
+  </script>
+</body>
+</html>
