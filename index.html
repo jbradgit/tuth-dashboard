@@ -590,9 +590,9 @@
     else if (mouseTargetX!=null){ const d=mouseTargetX-manX, step=6.9*(1+dragSpeedMod*0.05);
       if (Math.abs(d)>0.5) manX=clamp(manX+Math.max(-step,Math.min(step,d)), MAN_MIN_X, MAN_MAX_X); }
     // momentum glide after finger lift — decelerates naturally before stopping
-    if (!dragging && Math.abs(manVelX)>0.25){
+    if (!dragging && mouseTargetX==null && Math.abs(manVelX)>0.25){
       manX=clamp(manX+manVelX, MAN_MIN_X, MAN_MAX_X);
-      manVelX*=0.82;
+      manVelX*=0.90;
       if(Math.abs(manVelX)<0.25) manVelX=0;
     }
   }
@@ -2256,14 +2256,14 @@
       tableSwipeAnchorY=null; return;
     }
     if(dragging){
-      dragging=false; dragStartFieldX=null; dragManStartX=null;
-      manVelX=clamp(_dragVel*0.60, -13, 13);   // inject smoothed drag velocity as momentum
+      dragging=false; dragStartFieldX=null; dragManStartX=null; mouseTargetX=null;
+      manVelX=clamp(_dragVel*1.2, -18, 18);   // inject smoothed drag velocity as momentum
       _dragPrevMT=null; _dragVel=0;
       if(state===ST.SERVE && !kicked && !paused) triggerKick();
     }
     else if(TOUCH && state===ST.NAME){ kbdOpen(nameBuf); }  // touchend: re-focus hidden input so iOS keyboard appears
   },{passive:false});
-  canvas.addEventListener("pointercancel",()=>{ dragging=false; dragStartFieldX=null; dragManStartX=null; manVelX=0; _dragPrevMT=null; _dragVel=0; tableSwipeAnchorY=null; });
+  canvas.addEventListener("pointercancel",()=>{ dragging=false; dragStartFieldX=null; dragManStartX=null; mouseTargetX=null; manVelX=0; _dragPrevMT=null; _dragVel=0; tableSwipeAnchorY=null; });
 
   // ---- fixed-timestep loop at 28 Hz ----
   let last=performance.now(), acc=0;
